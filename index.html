@@ -117,6 +117,10 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            updateMessageType(); // Initialize the message type dropdown on page load
+        });
+
         async function confirmSend() {
             const email = document.getElementById('email').value;
             const businessEntities = document.getElementById('businessEntities').value;
@@ -181,6 +185,11 @@
                 opt.textContent = option;
                 messageType.appendChild(opt);
             });
+
+            // Set the first option as selected
+            if (options.length > 0) {
+                messageType.value = options[0];
+            }
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.5/pizzip.min.js"></script>
