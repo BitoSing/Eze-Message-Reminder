@@ -25,12 +25,11 @@
             border-radius: 8px;
             display: flex;
             gap: 20px;
+            flex-wrap: wrap;
         }
-        .form-container {
-            flex: 1;
-        }
-        .data-container {
-            flex: 1;
+        .form-container, .data-container {
+            flex: 1 1 100%;
+            margin-bottom: 20px;
         }
         .form-group {
             margin-bottom: 15px;
@@ -68,7 +67,7 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
-            width: 25%;
+            width: 100%;
         }
         button:hover {
             background-color: #4cae4c;
@@ -79,29 +78,24 @@
             margin-bottom: 10px;
             border-left: 4px solid #5cb85c;
             border-radius: 4px;
+            font-family: Calibri, sans-serif;
+            font-size: 14px;
         }
         .required-text {
             color: red;
             font-size: 12px;
             display: none;
         }
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                margin: 10px;
-            }
-            .form-container, .data-container {
-                width: 100%;
-            }
-        }
         .button-container {
             display: flex;
             gap: 10px;
             justify-content: flex-start;
+            flex-wrap: wrap;
         }
         .button-container button {
             padding: 10px 20px;
             font-size: 14px;
+            flex: 1 1 auto;
         }
         .button-container button:nth-child(2) {
             background-color: red;
@@ -112,6 +106,16 @@
         .submission-info {
             font-style: italic;
             font-size: 10px;
+            font-family: Calibri, sans-serif;
+        }
+        @media (min-width: 768px) {
+            .form-container, .data-container {
+                flex: 1;
+                margin-bottom: 0;
+            }
+            .button-container button {
+                width: auto;
+            }
         }
     </style>
 </head>
