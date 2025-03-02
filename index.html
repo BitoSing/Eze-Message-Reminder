@@ -90,6 +90,21 @@
                 width: 100%;
             }
         }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        .button-container button:nth-child(2) {
+            background-color: red;
+        }
+        .button-container button:nth-child(2):hover {
+            background-color: darkred;
+        }
     </style>
 </head>
 <body>
@@ -115,6 +130,7 @@
             </div>
             <div class="button-container">
                 <button type="button" onclick="confirmSend()">Send</button>
+                <button type="button" onclick="clearData()">Clear Data</button>
             </div>
         </div>
         <div class="data-container" id="dataContainer">
@@ -191,6 +207,11 @@
             dataItem.className = 'data-item';
             dataItem.innerHTML = `<strong>To:</strong> ${email}<br><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}`;
             dataContainer.appendChild(dataItem);
+        }
+
+        function clearData() {
+            const dataContainer = document.getElementById('dataContainer');
+            dataContainer.innerHTML = ''; // Clear all stored data
         }
 
         function updateMessageType() {
