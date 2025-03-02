@@ -76,6 +76,11 @@
             border-left: 4px solid #5cb85c;
             border-radius: 4px;
         }
+        .required-text {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -106,6 +111,7 @@
             <div class="form-group">
                 <label for="email">Email send to:</label>
                 <input type="email" id="email" name="email" multiple required>
+                <span id="emailRequiredText" class="required-text">*Required</span>
             </div>
             <div class="button-container">
                 <button type="button" onclick="confirmSend()">Send</button>
@@ -123,12 +129,24 @@
 
         async function confirmSend() {
             const email = document.getElementById('email').value;
+            const emailRequiredText = document.getElementById('emailRequiredText');
+            
+            if (!email) {
+                emailRequiredText.style.display = 'inline';
+                return;
+            } else {
+                emailRequiredText.style.display = 'none';
+            }
+
             const businessEntities = document.getElementById('businessEntities').value;
             const messageType = document.getElementById('messageType').value;
             let message = '';
 
             if (businessEntities === "EZECOM" && messageType === "Eze - Email Termination") {
                 message = await fetchMessageFromDocx('http://localhost:8000/Message%20Reminder/Eze-Termination.Docx');
+                message = formatTerminationMessage("EZECOM", "085 888 181, 023 888 181", message);
+            } else if (businessEntities === "Cellcard" && messageType === "CC - Email Termination") {
+                message = formatTerminationMessage("Cellcard", "012 812 812", messageType);
             } else {
                 message = messageType;
             }
@@ -149,6 +167,22 @@
                 console.error('Error fetching message from docx:', error);
                 return `Error fetching message: ${error.message}`;
             }
+        }
+
+        function formatTerminationMessage(company, contactNumber, message) {
+            return `
+                Subject: ${company} - Request Termination form, For Customer CID: 220964, Name: Mr. Namhong Ek
+                <br>Dear Valuable Customer, 
+                <br>We hope this email finds you well,
+                <br>We feel disappointed to hear that you have decided to part ways with ${company}. We understand that you have been a valued customer for many years, and we appreciate your loyalty and good cooperation. 
+                <br>According to our service agreement, customer is required to notice termination to ${company} at least 30 days'. This means that your subscription will be terminated following your next billing date.
+                <br>To be official notice, please kindly help to complete the termination form per attached file with Sign & Stamp and submit it back to ${company} via this email or drop by the nearby ${company}’s office.
+                <br>${company} wishes to have loyalty and good cooperation customer as you again in furthermore.
+                <br>Note: Any decision was changed or reactivate your account back, you can contact directly to our Hotline by: 
+                <br>Contact Number      : ${contactNumber} 
+                <br>Thanks, and regarding,
+                <br>${company}
+            `;
         }
 
         function storeData(email, message) {
