@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            gap: 20px;
+        }
+        .form-container {
+            flex: 1;
+        }
+        .data-container {
+            flex: 1;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="email"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        input[type="email"]:focus, textarea:focus, select:focus {
+            border-color: #5cb85c;
+        }
+        button {
+            padding: 12px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .data-item {
+            background-color: #e9f7ef;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #5cb85c;
+            border-radius: 4px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                margin: 10px;
+            }
+            .form-container, .data-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="form-group">
+                <label for="businessEntities">Business Entities:</label>
+                <select id="businessEntities" name="businessEntities" onchange="updateMessageType()" required>
+                    <option value="EZECOM">EZECOM</option>
+                    <option value="Cellcard">Cellcard</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="messageType">Message Type:</label>
+                <select id="messageType" name="messageType" required>
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Email send to:</label>
+                <input type="email" id="email" name="email" multiple required>
+            </div>
+            <div class="button-container">
+                <button type="button" onclick="confirmSend()">Send</button>
+            </div>
+        </div>
+        <div class="data-container" id="dataContainer">
+            <!-- Stored data will appear here -->
+        </div>
+    </div>
+
+    <script>
+        async function confirmSend() {
+            const email = document.getElementById('email').value;
+            const businessEntities = document.getElementById('businessEntities').value;
+            const messageType = document.getElementById('messageType').value;
+            let message = '';
+
+            if (businessEntities === "EZECOM" && messageType === "Eze - Email Termination") {
+                message = await fetchMessageFromDocx('http://localhost:8000/Message%20Reminder/Eze-Termination.Docx');
+            } else {
+                message = messageType;
+            }
+
+            storeData(email, message);
+        }
+
+        async function fetchMessageFromDocx(filePath) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const arrayBuffer = await response.arrayBuffer();
+                const doc = new window.docxtemplater(new window.PizZip(arrayBuffer));
+                return doc.getFullText();
+            } catch (error) {
+                console.error('Error fetching message from docx:', error);
+                return `Error fetching message: ${error.message}`;
+            }
+        }
+
+        function storeData(email, message) {
+            const dataContainer = document.getElementById('dataContainer');
+            const dataItem = document.createElement('div');
+            dataItem.className = 'data-item';
+            dataItem.innerHTML = `<strong>To:</strong> ${email}<br><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}`;
+            dataContainer.appendChild(dataItem);
+        }
+
+        function updateMessageType() {
+            const businessEntities = document.getElementById('businessEntities').value;
+            const messageType = document.getElementById('messageType');
+            messageType.innerHTML = ''; // Clear existing options
+
+            let options = [];
+            if (businessEntities === 'EZECOM') {
+                options = [
+                    'Eze - SMS Reminder',
+                    'Eze - Email Reminder',
+                    'Eze - Email Termination'
+                ];
+            } else if (businessEntities === 'Cellcard') {
+                options = [
+                    'CC - SMS Reminder',
+                    'CC - Email Reminder',
+                    'CC - Email Termination'
+                ];
+            }
+
+            options.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option;
+                opt.textContent = option;
+                messageType.appendChild(opt);
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.5/pizzip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.21.0/docxtemplater.min.js"></script>
+</body>
+</html>
