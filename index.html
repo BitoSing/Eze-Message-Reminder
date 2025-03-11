@@ -120,6 +120,21 @@
         .hidden {
             display: none;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 6px; /* Reduced padding */
+            text-align: left;
+            font-size: 14px; /* Adjusted font size */
+        }
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
@@ -168,6 +183,8 @@
                 message = formatTerminationMessage("EZECOM", "085 888 181, 023 888 181", message);
             } else if (businessEntities === "Cellcard" && messageType === "CC - Email Termination") {
                 message = formatTerminationMessage("Cellcard", "012 812 812", messageType);
+            } else if (messageType === "Eze - Email Offset from EZECOM to Cellcard") {
+                message = formatReimbursementMessage();
             } else {
                 message = messageType;
             }
@@ -176,19 +193,36 @@
             dataContainer.innerHTML = `<div class="data-item">${message.replace(/\n/g, '<br>')}</div>`;
         }
 
-        async function fetchMessageFromDocx(filePath) {
-            try {
-                const response = await fetch(filePath);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const arrayBuffer = await response.arrayBuffer();
-                const doc = new window.docxtemplater(new window.PizZip(arrayBuffer));
-                return doc.getFullText();
-            } catch (error) {
-                console.error('Error fetching message from docx:', error);
-                return `Error fetching message: ${error.message}`;
-            }
+        function formatReimbursementMessage() {
+            return `
+                Subject: Request offset with Cellcard on Correct Cellcard ID - ######
+
+                <br>Send to: receivable@ezecomcorp.com, huotdara@cellcard.com.kh,
+                <br>CC: ychanna@ezecom.com.kh, schanpenhbormey@ezecom.com.kh, customercare@cellcard.com.kh, ARprepaid@cellcard.com.kh, peskadervy@ezecom.com.kh, lheng@ezecom.com.kh,
+                <br>Dear AR Team,
+                <br>We hope this email finds you well.
+                <br>A Cellcard customer mistakenly made a payment to EZECOM. To avoid service disruption, please
+                <br>assist in offsetting and transferring the credit back to the correct Cellcard account as per the details below:
+                <br>Below are the details of the transaction:
+                <br><table>
+                    <tr>
+                        <th>Correct Cellcard ID</th>
+                        <th>Customer Name</th>
+                        <th>Transaction Date</th>
+                        <th>Amount Paid</th>
+                    </tr>
+                    <tr>
+                        <td>######</td>
+                        <td>######</td>
+                        <td>01-Mar-25</td>
+                        <td>$108</td>
+                    </tr>
+                </table>
+                <br>Kindly let us know if any additional information is required. Your prompt assistance would be
+                <br>greatly appreciated.
+                <br>Thank you for your cooperation.
+                <br>Best regards,
+            `;
         }
 
         function formatTerminationMessage(company, contactNumber, message) {
@@ -207,6 +241,21 @@
             `;
         }
 
+        async function fetchMessageFromDocx(filePath) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const arrayBuffer = await response.arrayBuffer();
+                const doc = new window.docxtemplater(new window.PizZip(arrayBuffer));
+                return doc.getFullText();
+            } catch (error) {
+                console.error('Error fetching message from docx:', error);
+                return `Error fetching message: ${error.message}`;
+            }
+        }
+
         function updateMessageType() {
             const businessEntities = document.getElementById('businessEntities').value;
             const messageType = document.getElementById('messageType');
@@ -217,7 +266,8 @@
                 options = [
                     'Eze - SMS Reminder',
                     'Eze - Email Reminder',
-                    'Eze - Email Termination'
+                    'Eze - Email Termination',
+                    'Eze - Email Offset from EZECOM to Cellcard'
                 ];
             } else if (businessEntities === 'Cellcard') {
                 options = [
