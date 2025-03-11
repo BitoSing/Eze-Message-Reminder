@@ -40,7 +40,7 @@
             font-weight: bold;
             color: #333;
         }
-        input[type="email"], textarea, select {
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -51,26 +51,8 @@
             outline: none;
             transition: border-color 0.3s ease;
         }
-        input[type="email"]:focus, textarea:focus, select:focus {
+        select:focus {
             border-color: #5cb85c;
-        }
-        input::placeholder {
-            color: #999;
-            font-style: italic;
-        }
-        button {
-            padding: 12px;
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #4cae4c;
         }
         .data-item {
             background-color: #e9f7ef;
@@ -81,40 +63,10 @@
             font-family: Calibri, sans-serif;
             font-size: 14px;
         }
-        .required-text {
-            color: red;
-            font-size: 12px;
-            display: none;
-        }
-        .button-container {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-        }
-        .button-container button {
-            padding: 10px 20px;
-            font-size: 14px;
-            flex: 1 1 auto;
-        }
-        .button-container button:nth-child(2) {
-            background-color: red;
-        }
-        .button-container button:nth-child(2):hover {
-            background-color: darkred;
-        }
-        .submission-info {
-            font-style: italic;
-            font-size: 10px;
-            font-family: Calibri, sans-serif;
-        }
         @media (min-width: 768px) {
             .form-container, .data-container {
                 flex: 1;
                 margin-bottom: 0;
-            }
-            .button-container button {
-                width: auto;
             }
         }
         .hidden {
@@ -128,9 +80,9 @@
             border: 1px solid #ccc;
         }
         th, td {
-            padding: 6px; /* Reduced padding */
+            padding: 6px;
             text-align: left;
-            font-size: 14px; /* Adjusted font size */
+            font-size: 14px;
         }
         th {
             background-color: #f2f2f2;
@@ -153,15 +105,6 @@
                     <!-- Options will be populated dynamically -->
                 </select>
             </div>
-            <div class="form-group hidden">
-                <label for="email">Email send to:</label>
-                <input type="email" id="email" name="email" multiple required placeholder="example@gmail.com">
-                <span id="emailRequiredText" class="required-text">*Required</span>
-            </div>
-            <div class="button-container hidden">
-                <button type="button" onclick="confirmSend()">Send</button>
-                <button type="button" onclick="clearData()">Clear Data</button>
-            </div>
         </div>
         <div class="data-container" id="dataContainer">
             <!-- Stored data will appear here -->
@@ -173,37 +116,72 @@
             updateMessageType(); // Initialize the message type dropdown on page load
         });
 
-        async function displayMessage() {
+        function displayMessage() {
             const businessEntities = document.getElementById('businessEntities').value;
             const messageType = document.getElementById('messageType').value;
             let message = '';
 
             if (businessEntities === "EZECOM" && messageType === "Eze - Email Termination") {
-                message = await fetchMessageFromDocx('http://localhost:8000/Message%20Reminder/Eze-Termination.Docx');
-                message = formatTerminationMessage("EZECOM", "085 888 181, 023 888 181", message);
+                message = formatTerminationMessage("EZECOM", "085 888 181, 023 888 181");
             } else if (businessEntities === "Cellcard" && messageType === "CC - Email Termination") {
-                message = formatTerminationMessage("Cellcard", "012 812 812", messageType);
+                message = formatTerminationMessage("Cellcard", "012 812 812");
             } else if (messageType === "Eze - Email Offset from EZECOM to Cellcard") {
                 message = formatReimbursementMessage();
+            } else if (messageType === "Eze - Invoice 1st Follow up") {
+                message = formatInvoiceFollowUpMessage();
             } else {
-                message = messageType;
+                message = `Template for ${messageType} (Example format)`;
             }
 
             const dataContainer = document.getElementById('dataContainer');
-            dataContainer.innerHTML = `<div class="data-item">${message.replace(/\n/g, '<br>')}</div>`;
+            dataContainer.innerHTML = `<div class="data-item">${message}</div>`;
+        }
+
+        function formatInvoiceFollowUpMessage() {
+            return `
+                <strong>Subject: Invoice Follow-Up</strong><br><br>
+                Dear [Customer's Name],<br><br>
+                I hope this email finds you well.<br><br>
+                We would like to follow up on the outstanding invoice(s) listed below. Kindly arrange payment at your earliest convenience to avoid any service disruption. Please note that terms and conditions apply.<br><br>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Invoice Number</th>
+                            <th>Customer ID</th>
+                            <th>Customer Name</th>
+                            <th>Amount Pending</th>
+                            <th>Invoice Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>XXXXXXX</td>
+                            <td>XXXXXXX</td>
+                            <td>####</td>
+                            <td>$XXX.XX</td>
+                            <td>01-Mar-25</td>
+                        </tr>
+                    </tbody>
+                </table><br><br>
+                Should you require any further details or have already processed the payment, please disregard this email and kindly share the payment confirmation with us.<br><br>
+                We appreciate your prompt attention to this matter.<br><br>
+                Best regards,<br>
+                Heng
+            `;
         }
 
         function formatReimbursementMessage() {
             return `
-                Subject: Request offset with Cellcard on Correct Cellcard ID - ######
+                <strong>Subject: Request offset with Cellcard on Correct Cellcard ID - ######</strong><br><br>
 
-                <br>Send to: receivable@ezecomcorp.com, huotdara@cellcard.com.kh,
-                <br>CC: ychanna@ezecom.com.kh, schanpenhbormey@ezecom.com.kh, customercare@cellcard.com.kh, ARprepaid@cellcard.com.kh, peskadervy@ezecom.com.kh, lheng@ezecom.com.kh,
-                <br>Dear AR Team,
-                <br>We hope this email finds you well.
-                <br>A Cellcard customer mistakenly made a payment to EZECOM. To avoid service disruption, please
-                <br>assist in offsetting and transferring the credit back to the correct Cellcard account as per the details below:
-                <br>Below are the details of the transaction:
+                <strong>Send to:</strong> receivable@ezecomcorp.com, huotdara@cellcard.com.kh<br><br>
+
+                <strong>CC:</strong> ychanna@ezecom.com.kh, schanpenhbormey@ezecom.com.kh, customercare@cellcard.com.kh, ARprepaid@cellcard.com.kh, peskadervy@ezecom.com.kh, lheng@ezecom.com.kh<br><br>
+
+                Dear AR Team,<br><br>
+                We hope this email finds you well.<br><br>
+                A Cellcard customer mistakenly made a payment to EZECOM. To avoid service disruption, please assist in offsetting and transferring the credit back to the correct Cellcard account as per the details below:<br><br>
+                Below are the details of the transaction:<br><br>
                 <table>
                     <tr>
                         <th>Correct Cellcard ID</th>
@@ -217,42 +195,30 @@
                         <td>01-Mar-25</td>
                         <td>$108</td>
                     </tr>
-                </table>
-                Kindly let us know if any additional information is required. Your prompt assistance would be greatly appreciated.
-                <br>Thank you for your cooperation.
-                <br>Best regards,
+                </table><br>
+                Kindly let us know if any additional information is required. Your prompt assistance would be greatly appreciated.<br><br>
+                Thank you for your cooperation.<br><br>
+                Best regards,
             `;
         }
 
-        function formatTerminationMessage(company, contactNumber, message) {
+        function formatTerminationMessage(company, contactNumber) {
             return `
-                Subject: ${company} - Request Termination form, For Customer CID: 220964, Name: Mr. Namhong Ek
-                <br>Dear Valuable Customer, 
-                <br>We hope this email finds you well,
-                <br>We feel disappointed to hear that you have decided to part ways with ${company}. We understand that you have been a valued customer for many years, and we appreciate your loyalty and good cooperation. 
-                <br>According to our service agreement, customer is required to notice termination to ${company} at least 30 days'. This means that your subscription will be terminated following your next billing date.
-                <br>To be official notice, please kindly help to complete the termination form per attached file with Sign & Stamp and submit it back to ${company} via this email or drop by the nearby ${company}’s office.
-                <br>${company} wishes to have loyalty and good cooperation customer as you again in furthermore.
-                <br>Note: Any decision was changed or reactivate your account back, you can contact directly to our Hotline by: 
-                <br>Contact Number      : ${contactNumber} 
-                <br>Thanks, and regarding,
-                <br>${company}
-            `;
-        }
+                <strong>Subject: ${company} - Request Termination form, For Customer CID: 220964, Name: Mr. Namhong Ek</strong><br><br>
 
-        async function fetchMessageFromDocx(filePath) {
-            try {
-                const response = await fetch(filePath);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const arrayBuffer = await response.arrayBuffer();
-                const doc = new window.docxtemplater(new window.PizZip(arrayBuffer));
-                return doc.getFullText();
-            } catch (error) {
-                console.error('Error fetching message from docx:', error);
-                return `Error fetching message: ${error.message}`;
-            }
+                Dear Valuable Customer,<br><br>
+
+                We hope this email finds you well,<br><br>
+
+                We feel disappointed to hear that you have decided to part ways with ${company}. We understand that you have been a valued customer for many years, and we appreciate your loyalty and good cooperation.<br><br>
+                According to our service agreement, customer is required to notice termination to ${company} at least 30 days'. This means that your subscription will be terminated following your next billing date.<br><br>
+                To be official notice, please kindly help to complete the termination form per attached file with Sign & Stamp and submit it back to ${company} via this email or drop by the nearby ${company}'s office.<br><br>
+                ${company} wishes to have loyalty and good cooperation customer as you again in furthermore.<br><br>
+                Note: Any decision was changed or reactivate your account back, you can contact directly to our Hotline by:<br>
+                Contact Number: ${contactNumber}<br><br>
+                Thanks, and regarding,<br>
+                ${company}
+            `;
         }
 
         function updateMessageType() {
@@ -266,7 +232,8 @@
                     'Eze - SMS Reminder',
                     'Eze - Email Reminder',
                     'Eze - Email Termination',
-                    'Eze - Email Offset from EZECOM to Cellcard'
+                    'Eze - Email Offset from EZECOM to Cellcard',
+                    'Eze - Invoice 1st Follow up'
                 ];
             } else if (businessEntities === 'Cellcard') {
                 options = [
@@ -292,7 +259,5 @@
             displayMessage();
         }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.5/pizzip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.21.0/docxtemplater.min.js"></script>
 </body>
 </html>
