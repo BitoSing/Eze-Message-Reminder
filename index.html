@@ -93,14 +93,14 @@
     <div class="container">
         <div class="form-container">
             <div class="form-group">
-                <label for="businessEntities">Business Entities:</label>
+                <label for="businessEntities">Select Business Entity:</label>
                 <select id="businessEntities" name="businessEntities" onchange="updateMessageType()" required>
                     <option value="EZECOM">EZECOM</option>
                     <option value="Cellcard">Cellcard</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="messageType">Message Type:</label>
+                <label for="messageType">Select Message Type:</label>
                 <select id="messageType" name="messageType" onchange="displayMessage()" required>
                     <!-- Options will be populated dynamically -->
                 </select>
@@ -122,13 +122,27 @@
             let message = '';
 
             if (businessEntities === "EZECOM" && messageType === "Eze - Email Termination") {
-                message = formatTerminationMessage("EZECOM", "085 888 181, 023 888 181");
+                message = formatTerminationMessage("EZECOM", "085 888 181");
             } else if (businessEntities === "Cellcard" && messageType === "CC - Email Termination") {
                 message = formatTerminationMessage("Cellcard", "012 812 812");
             } else if (messageType === "Eze - Email Offset from EZECOM to Cellcard") {
-                message = formatReimbursementMessage();
-            } else if (messageType === "Eze - Invoice 1st Follow up") {
-                message = formatInvoiceFollowUpMessage();
+                message = formatReimbursementMessage("EZECOM", "Cellcard");
+            } else if (messageType === "CC - Email Offset from Cellcard to EZECOM") {
+                message = formatReimbursementMessage("Cellcard", "EZECOM");
+            } else if (messageType === "Eze - Email Inv. 1st Follow up" || messageType === "CC - Email Inv. 1st Follow up") {
+                message = formatFirstInvoiceFollowUpMessage();
+            } else if (messageType === "Eze - Email Inv. 2nd Follow up" || messageType === "CC - Email Inv. 2nd Follow up") {
+                message = formatInvoiceFollowUpMessage("Second Reminder - Urgent Payment Required");
+            } else if (messageType === "Eze - Email Inv. 3rd Follow up" || messageType === "CC - Email Inv. 3rd Follow up") {
+                message = formatThirdInvoiceFollowUpMessage();
+            } else if (messageType === "Eze - EOS Email Reminder") {
+                message = formatEosEmailReminder("EZECOM");
+            } else if (messageType === "CC - CCOS Email Reminder") {
+                message = formatEosEmailReminder("Cellcard");
+            } else if (messageType === "Eze - EOS SMS Reminder") {
+                message = formatEosSmsReminder("EZECOM");
+            } else if (messageType === "CC - CCOS SMS Reminder") {
+                message = formatEosSmsReminder("Cellcard");
             } else {
                 message = `Template for ${messageType} (Example format)`;
             }
@@ -137,12 +151,13 @@
             dataContainer.innerHTML = `<div class="data-item">${message}</div>`;
         }
 
-        function formatInvoiceFollowUpMessage() {
+        function formatFirstInvoiceFollowUpMessage() {
             return `
-                <strong>Subject: Invoice Follow-Up</strong><br><br>
+                <strong>Subject: First Reminder - Follow-Up on Pending Invoice Payment</strong><br><br>
                 Dear [Customer's Name],<br><br>
                 I hope this email finds you well.<br><br>
                 We would like to follow up on the outstanding invoice(s) listed below. Kindly arrange payment at your earliest convenience to avoid any service disruption. Please note that terms and conditions apply.<br><br>
+                <strong>Invoice Details:</strong><br><br>
                 <table>
                     <thead>
                         <tr>
@@ -162,7 +177,7 @@
                             <td>01-Mar-25</td>
                         </tr>
                     </tbody>
-                </table><br><br>
+                </table><br>
                 Should you require any further details or have already processed the payment, please disregard this email and kindly share the payment confirmation with us.<br><br>
                 We appreciate your prompt attention to this matter.<br><br>
                 Best regards,<br>
@@ -170,9 +185,123 @@
             `;
         }
 
-        function formatReimbursementMessage() {
+        function formatInvoiceFollowUpMessage(subject) {
             return `
-                <strong>Subject: Request offset with Cellcard on Correct Cellcard ID - ######</strong><br><br>
+                <strong>Subject: ${subject}</strong><br><br>
+                Dear [Customer's Name],<br><br>
+                We refer to our previous reminder regarding your overdue invoice(s).<br><br>
+                As of today, payment remains outstanding, and immediate action is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Invoice Number</th>
+                            <th>Customer ID</th>
+                            <th>Customer Name</th>
+                            <th>Amount Pending</th>
+                            <th>Invoice Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>XXXXXXX</td>
+                            <td>XXXXXXX</td>
+                            <td>####</td>
+                            <td>$XXX.XX</td>
+                            <td>01-Mar-25</td>
+                        </tr>
+                    </tbody>
+                </table><br>
+                Please ensure full payment is made by Final Due Date to avoid service disruption. If payment has already been processed, kindly provide the payment confirmation at your earliest convenience.<br><br>
+                Noted: Failure to settle the outstanding balance by the due date will result in immediate action, which may include disconnecting or dismantling of services.<br><br>
+                For any further assistance, feel free to reach out. We appreciate your urgent attention to this matter.<br><br>
+                Best regards,<br>
+                Heng
+            `;
+        }
+
+        function formatThirdInvoiceFollowUpMessage() {
+            return `
+                <strong>Subject: Final Reminder - Immediate Payment Required</strong><br><br>
+                Dear [Customer's Name],<br><br>
+                This is our final reminder regarding your overdue invoice(s). Immediate payment is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
+                <strong>Invoice Details:</strong><br><br>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Invoice Number</th>
+                            <th>Customer ID</th>
+                            <th>Customer Name</th>
+                            <th>Amount Pending</th>
+                            <th>Invoice Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>XXXXXXX</td>
+                            <td>XXXXXXX</td>
+                            <td>####</td>
+                            <td>$XXX.XX</td>
+                            <td>01-Mar-25</td>
+                        </tr>
+                    </tbody>
+                </table><br>
+                Please ensure full payment is made immediately to avoid service disruption. If payment has already been processed, kindly provide the payment confirmation at your earliest convenience.<br><br>
+                Noted: Failure to settle the outstanding balance by the due date will result in immediate action, which may include disconnecting or dismantling of services.<br><br>
+                For any further assistance, feel free to reach out. We appreciate your urgent attention to this matter.<br><br>
+                Best regards,<br>
+                Heng
+            `;
+        }
+
+        function formatEosEmailReminder(company) {
+            return `
+                <strong>Subject: Outstanding Balance Reminder</strong><br><br>
+                Dear [Customer's Name],<br><br>
+                Overdue Reminder!<br><br>
+                Our record is still shown your overdue invoice hasn't paid yet and please revert the payment now to continue service and avoid interruption.<br><br>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer ID</th>
+                            <th>Customer Name</th>
+                            <th>Invoice ID</th>
+                            <th>Invoice Due Date</th>
+                            <th>Amount</th>
+                            <th>Open Day</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>239833</td>
+                            <td>MC MEDICAL CO.,LTD</td>
+                            <td>2064953</td>
+                            <td>2025-03-17 00:12:00</td>
+                            <td>119</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table><br>
+                For more information, please visit our website at [www.${company.toLowerCase()}.com.kh/support/payment]www.${company.toLowerCase()}.com.kh/support/payment<br><br>
+                Any inquiries about this invoice, payment, or email to our billing department as per attached below.<br><br>
+                - Email: billing@${company.toLowerCase()}.com.kh,<br>
+                - ${company} APP: <a href="https://${company.toLowerCase()}.page.link/download">https://${company.toLowerCase()}.page.link/download</a><br>
+                - ${company}'s Telegram: <a href="https://t.me/${company}CXbot">https://t.me/${company}CXbot</a><br>
+                - ${company} Facebook Page: <a href="https://www.facebook.com/${company.toLowerCase()}/">https://www.facebook.com/${company.toLowerCase()}/</a><br><br>
+                *Noted If you have already made payment or any special arrangement with ${company}, please help to ignore this email.<br><br>
+                Regards,<br>
+                ${company}
+            `;
+        }
+
+        function formatEosSmsReminder(company) {
+            return `
+                គណនី CID: 255206 សមតុល្យ: $ 15.00 ផុតសុពលភាពនៅថ្ងៃទី១៨ ខែកុម្ភៈ ឆ្នាំ២០២៥ សូមធ្វើការទូរទាត់ប្រាក់ដើម្បីបន្តប្រើប្រាស់សេវាកម្មអ៊ិនធឺណេត។
+            `;
+        }
+
+        function formatReimbursementMessage(fromCompany, toCompany) {
+            return `
+                <strong>Subject: Request offset with ${toCompany} on Correct ${toCompany} ID - ######</strong><br><br>
 
                 <strong>Send to:</strong> receivable@ezecomcorp.com, huotdara@cellcard.com.kh<br><br>
 
@@ -180,11 +309,11 @@
 
                 Dear AR Team,<br><br>
                 We hope this email finds you well.<br><br>
-                A Cellcard customer mistakenly made a payment to EZECOM. To avoid service disruption, please assist in offsetting and transferring the credit back to the correct Cellcard account as per the details below:<br><br>
+                A ${toCompany} customer mistakenly made a payment to ${fromCompany}. To avoid service disruption, please assist in offsetting and transferring the credit back to the correct ${toCompany} account as per the details below:<br><br>
                 Below are the details of the transaction:<br><br>
                 <table>
                     <tr>
-                        <th>Correct Cellcard ID</th>
+                        <th>Correct ${toCompany} ID</th>
                         <th>Customer Name</th>
                         <th>Transaction Date</th>
                         <th>Amount Paid</th>
@@ -206,17 +335,20 @@
             return `
                 <strong>Subject: ${company} - Request Termination form, For Customer CID: 220964, Name: Mr. Namhong Ek</strong><br><br>
 
-                Dear Valuable Customer,<br><br>
+                Dear Valued Customer,<br><br>
 
-                We hope this email finds you well,<br><br>
+                We regret to inform you that we have received your request to terminate your services with ${company}. We understand that this decision was not made lightly, and we appreciate the time you have spent with us.<br><br>
 
-                We feel disappointed to hear that you have decided to part ways with ${company}. We understand that you have been a valued customer for many years, and we appreciate your loyalty and good cooperation.<br><br>
-                According to our service agreement, customer is required to notice termination to ${company} at least 30 days'. This means that your subscription will be terminated following your next billing date.<br><br>
-                To be official notice, please kindly help to complete the termination form per attached file with Sign & Stamp and submit it back to ${company} via this email or drop by the nearby ${company}'s office.<br><br>
-                ${company} wishes to have loyalty and good cooperation customer as you again in furthermore.<br><br>
-                Note: Any decision was changed or reactivate your account back, you can contact directly to our Hotline by:<br>
+                As per our service agreement, a 30-day notice period is required for termination. Your subscription will be terminated following your next billing date.<br><br>
+
+                To proceed with the termination, please complete the attached termination form, sign and stamp it, and return it to us via email or by visiting the nearest ${company} office.<br><br>
+
+                Should you reconsider your decision or wish to reactivate your account, please contact our hotline at:<br>
                 Contact Number: ${contactNumber}<br><br>
-                Thanks, and regarding,<br>
+
+                Thank you for your cooperation and understanding.<br><br>
+
+                Best regards,<br>
                 ${company}
             `;
         }
@@ -229,17 +361,23 @@
             let options = [];
             if (businessEntities === 'EZECOM') {
                 options = [
-                    'Eze - SMS Reminder',
-                    'Eze - Email Reminder',
+                    'Eze - EOS SMS Reminder',
+                    'Eze - EOS Email Reminder',
                     'Eze - Email Termination',
                     'Eze - Email Offset from EZECOM to Cellcard',
-                    'Eze - Invoice 1st Follow up'
+                    'Eze - Email Inv. 1st Follow up',
+                    'Eze - Email Inv. 2nd Follow up',
+                    'Eze - Email Inv. 3rd Follow up'
                 ];
             } else if (businessEntities === 'Cellcard') {
                 options = [
-                    'CC - SMS Reminder',
-                    'CC - Email Reminder',
-                    'CC - Email Termination'
+                    'CC - CCOS SMS Reminder',
+                    'CC - CCOS Email Reminder',
+                    'CC - Email Termination',
+                    'CC - Email Offset from Cellcard to EZECOM',
+                    'CC - Email Inv. 1st Follow up',
+                    'CC - Email Inv. 2nd Follow up',
+                    'CC - Email Inv. 3rd Follow up'
                 ];
             }
 
