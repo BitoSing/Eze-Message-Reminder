@@ -117,6 +117,9 @@
                 width: auto;
             }
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -131,16 +134,16 @@
             </div>
             <div class="form-group">
                 <label for="messageType">Message Type:</label>
-                <select id="messageType" name="messageType" required>
+                <select id="messageType" name="messageType" onchange="displayMessage()" required>
                     <!-- Options will be populated dynamically -->
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group hidden">
                 <label for="email">Email send to:</label>
                 <input type="email" id="email" name="email" multiple required placeholder="example@gmail.com">
                 <span id="emailRequiredText" class="required-text">*Required</span>
             </div>
-            <div class="button-container">
+            <div class="button-container hidden">
                 <button type="button" onclick="confirmSend()">Send</button>
                 <button type="button" onclick="clearData()">Clear Data</button>
             </div>
@@ -155,17 +158,7 @@
             updateMessageType(); // Initialize the message type dropdown on page load
         });
 
-        async function confirmSend() {
-            const email = document.getElementById('email').value;
-            const emailRequiredText = document.getElementById('emailRequiredText');
-            
-            if (!email) {
-                emailRequiredText.style.display = 'inline';
-                return;
-            } else {
-                emailRequiredText.style.display = 'none';
-            }
-
+        async function displayMessage() {
             const businessEntities = document.getElementById('businessEntities').value;
             const messageType = document.getElementById('messageType').value;
             let message = '';
@@ -179,7 +172,8 @@
                 message = messageType;
             }
 
-            storeData(email, message);
+            const dataContainer = document.getElementById('dataContainer');
+            dataContainer.innerHTML = `<div class="data-item">${message.replace(/\n/g, '<br>')}</div>`;
         }
 
         async function fetchMessageFromDocx(filePath) {
@@ -213,26 +207,6 @@
             `;
         }
 
-        function storeData(email, message) {
-            const dataContainer = document.getElementById('dataContainer');
-            const dataItem = document.createElement('div');
-            dataItem.className = 'data-item';
-
-            const now = new Date();
-            const dateOptions = { day: '2-digit', month: 'short', year: 'numeric' };
-            const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
-            const formattedDate = now.toLocaleDateString('en-GB', dateOptions);
-            const formattedTime = now.toLocaleTimeString('en-US', timeOptions);
-
-            dataItem.innerHTML = `<strong>To:</strong> ${email}<br><span class="submission-info"><strong>Sent on:</strong> ${formattedDate}, ${formattedTime}</span><br><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}`;
-            dataContainer.appendChild(dataItem);
-        }
-
-        function clearData() {
-            const dataContainer = document.getElementById('dataContainer');
-            dataContainer.innerHTML = ''; // Clear all stored data
-        }
-
         function updateMessageType() {
             const businessEntities = document.getElementById('businessEntities').value;
             const messageType = document.getElementById('messageType');
@@ -264,6 +238,9 @@
             if (options.length > 0) {
                 messageType.value = options[0];
             }
+
+            // Display the message for the selected option
+            displayMessage();
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.0.5/pizzip.min.js"></script>
