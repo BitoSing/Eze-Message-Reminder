@@ -166,13 +166,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            updateMainTopic(); // Initialize the main topic dropdown on page load
+            updateMainTopic(); // Initialize everything on page load
         });
 
         function displayMessage() {
             const businessEntities = document.getElementById('businessEntities').value;
             const messageType = document.getElementById('messageType').value;
             let message = '';
+
+            // Debug: Log values to ensure they're correct
+            console.log('Business Entity:', businessEntities);
+            console.log('Message Type:', messageType);
 
             if (messageType === "Email Termination") {
                 message = formatTerminationMessage(businessEntities, businessEntities === "EZECOM" ? "085 888 181" : "012 812 812");
@@ -190,14 +194,20 @@
                 message = formatEosEmailReminder(businessEntities);
             } else if (messageType === "EOS SMS Reminder") {
                 message = formatEosSmsReminder(businessEntities);
-            } else if (messageType === "Reactivation Offer") {
+            } else if (messageType === "After Expiry Date - Reactivation Offer") {
                 message = formatReactivationOfferMessage(businessEntities);
+            } else if (messageType === "Before Expiry Date - Renewal Offer") {
+                message = formatRenewalOfferMessage(businessEntities);
             } else {
                 message = `Template for ${messageType} (Example format)`;
             }
 
             const dataContainer = document.getElementById('dataContainer');
-            dataContainer.innerHTML = `<div class="data-item">${message}</div>`;
+            if (dataContainer) {
+                dataContainer.innerHTML = `<div class="data-item">${message}</div>`;
+            } else {
+                console.error('dataContainer not found');
+            }
         }
 
         function formatFirstInvoiceFollowUpMessage() {
@@ -397,7 +407,7 @@
                 <strong>Subject: Special Offer - Reactivate Your ${company} Internet Service Today!</strong><br><br>
                 Dear [Customer's Name],<br><br>
                 I hope this email finds you well.<br><br>
-                We noticed that your ${company} internet service has been inactive, and we’d love to welcome you back with a special reactivation offer! Reconnect today and enjoy seamless internet with exclusive benefits tailored just for you.<br><br>
+                We noticed that your ${company} internet service has expired, and we’d love to welcome you back with a special reactivation offer! Reconnect today and enjoy seamless internet with exclusive benefits tailored just for you.<br><br>
                 <strong>Account Details:</strong><br><br>
                 <table>
                     <thead>
@@ -406,6 +416,7 @@
                             <th>Customer Name</th>
                             <th>Previous Plan</th>
                             <th>Reactivation Offer</th>
+                            <th>Billing Date</th>
                             <th>Offer Valid Until</th>
                         </tr>
                     </thead>
@@ -415,6 +426,7 @@
                             <td>[Customer's Name]</td>
                             <td>10 Mbps Plan</td>
                             <td>50% Off First Month</td>
+                            <td>01-Apr-25</td>
                             <td>15-Apr-25</td>
                         </tr>
                     </tbody>
@@ -427,9 +439,51 @@
             `;
         }
 
+        function formatRenewalOfferMessage(company) {
+            return `
+                <strong>Subject: Special Offer - Renew Your ${company} Internet Service Before It Expires!</strong><br><br>
+                Dear [Customer's Name],<br><br>
+                I hope this email finds you well.<br><br>
+                We noticed that your ${company} internet service is nearing its expiry date. To ensure uninterrupted access to your reliable internet connection, we’re offering you a special renewal deal! Renew before your service expires and enjoy continued seamless connectivity with added benefits.<br><br>
+                <strong>Account Details:</strong><br><br>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer ID</th>
+                            <th>Customer Name</th>
+                            <th>Current Plan</th>
+                            <th>Renewal Offer</th>
+                            <th>Billing Date</th>
+                            <th>Expiry Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>XXXXXXX</td>
+                            <td>[Customer's Name]</td>
+                            <td>10 Mbps Plan</td>
+                            <td>10% Off Next Month</td>
+                            <td>01-Apr-25</td>
+                            <td>15-Apr-25</td>
+                        </tr>
+                    </tbody>
+                </table><br>
+                To renew your service and avoid any disruption, please reply to this email or contact our support team at ${company === 'EZECOM' ? '085 888 181' : '012 812 812'} before your expiry date. Act now to take advantage of this limited-time offer!<br><br>
+                We value your continued trust in ${company} and look forward to keeping you connected.<br><br>
+                Best regards,<br>
+                Heng<br>
+                ${company} Team
+            `;
+        }
+
         function updateMainTopic() {
-            const businessEntities = document.getElementById('businessEntities').value;
+            const businessEntities = document.getElementById('businessEntities');
             const mainTopic = document.getElementById('mainTopic');
+            if (!businessEntities || !mainTopic) {
+                console.error('businessEntities or mainTopic element not found');
+                return;
+            }
+
             mainTopic.innerHTML = ''; // Clear existing options
 
             const topics = [
@@ -437,7 +491,7 @@
                 'Service Termination',
                 'Payment Offset',
                 'Invoice Follow Up',
-                'Reactivation Offer'
+                'Renewal/Reactivation Offer'
             ];
 
             topics.forEach(topic => {
@@ -447,12 +501,10 @@
                 mainTopic.appendChild(opt);
             });
 
-            // Set the first option as selected
-            if (topics.length > 0) {
-                mainTopic.value = topics[0];
-            }
+            // Ensure a value is selected
+            mainTopic.value = topics[0] || '';
 
-            // Update the message type dropdown
+            // Trigger update of message type
             updateMessageType();
         }
 
@@ -460,6 +512,11 @@
             const businessEntities = document.getElementById('businessEntities').value;
             const mainTopic = document.getElementById('mainTopic').value;
             const messageType = document.getElementById('messageType');
+            if (!messageType) {
+                console.error('messageType element not found');
+                return;
+            }
+
             messageType.innerHTML = ''; // Clear existing options
 
             let options = [];
@@ -482,9 +539,10 @@
                     'Email Inv. 2nd Follow up',
                     'Email Inv. 3rd Follow up'
                 ];
-            } else if (mainTopic === 'Reactivation Offer') {
+            } else if (mainTopic === 'Renewal/Reactivation Offer') {
                 options = [
-                    'Reactivation Offer'
+                   'Before Expiry Date - Renewal Offer',
+                  'After Expiry Date - Reactivation Offer',
                 ];
             }
 
@@ -495,12 +553,10 @@
                 messageType.appendChild(opt);
             });
 
-            // Set the first option as selected
-            if (options.length > 0) {
-                messageType.value = options[0];
-            }
+            // Ensure a value is selected
+            messageType.value = options[0] || '';
 
-            // Display the message for the selected option
+            // Trigger display update
             displayMessage();
         }
     </script>
