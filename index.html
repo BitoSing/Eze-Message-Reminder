@@ -174,7 +174,6 @@
             const messageType = document.getElementById('messageType').value;
             let message = '';
 
-            // Debug: Log values to ensure they're correct
             console.log('Business Entity:', businessEntities);
             console.log('Message Type:', messageType);
 
@@ -414,10 +413,10 @@
                         <tr>
                             <th>Customer ID</th>
                             <th>Customer Name</th>
-                            <th>Previous Plan</th>
-                            <th>Reactivation Offer</th>
+                            <th>Current Plan</th>
                             <th>Billing Date</th>
-                            <th>Offer Valid Until</th>
+                            <th>Renewal Offer</th>
+                            <th>Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -425,9 +424,9 @@
                             <td>XXXXXXX</td>
                             <td>[Customer's Name]</td>
                             <td>10 Mbps Plan</td>
-                            <td>50% Off First Month</td>
                             <td>01-Apr-25</td>
-                            <td>15-Apr-25</td>
+                            <td>50% Off First Month</td>
+                            <td>$XX.XX</td>
                         </tr>
                     </tbody>
                 </table><br>
@@ -452,9 +451,9 @@
                             <th>Customer ID</th>
                             <th>Customer Name</th>
                             <th>Current Plan</th>
-                            <th>Renewal Offer</th>
                             <th>Billing Date</th>
-                            <th>Expiry Date</th>
+                            <th>Renewal Offer</th>
+                            <th>Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -462,9 +461,9 @@
                             <td>XXXXXXX</td>
                             <td>[Customer's Name]</td>
                             <td>10 Mbps Plan</td>
-                            <td>10% Off Next Month</td>
                             <td>01-Apr-25</td>
-                            <td>15-Apr-25</td>
+                            <td>10% Off Next Month</td>
+                            <td>$XX.XX</td>
                         </tr>
                     </tbody>
                 </table><br>
@@ -501,10 +500,7 @@
                 mainTopic.appendChild(opt);
             });
 
-            // Ensure a value is selected
             mainTopic.value = topics[0] || '';
-
-            // Trigger update of message type
             updateMessageType();
         }
 
@@ -541,8 +537,8 @@
                 ];
             } else if (mainTopic === 'Renewal/Reactivation Offer') {
                 options = [
-                   'Before Expiry Date - Renewal Offer',
-                  'After Expiry Date - Reactivation Offer',
+                    'After Expiry Date - Reactivation Offer',
+                    'Before Expiry Date - Renewal Offer'
                 ];
             }
 
@@ -553,10 +549,7 @@
                 messageType.appendChild(opt);
             });
 
-            // Ensure a value is selected
             messageType.value = options[0] || '';
-
-            // Trigger display update
             displayMessage();
         }
     </script>
