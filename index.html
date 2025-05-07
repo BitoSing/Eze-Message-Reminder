@@ -4,134 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Message Reminder</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
         }
         .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 10px;
-            padding: 15px;
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            max-width: 1280px;
+            margin: 1rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
         }
         .form-container, .data-container {
-            flex: 1 1 100%;
-            margin-bottom: 15px;
+            width: 100%;
         }
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 1.25rem;
         }
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-            font-size: clamp(14px, 4vw, 16px);
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
         }
         select {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: clamp(14px, 3.5vw, 16px);
-            outline: none;
-            transition: border-color 0.3s ease;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            background: #f9fafb;
         }
         select:focus {
-            border-color: #5cb85c;
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         .data-item {
-            background-color: #e9f7ef;
-            padding: 8px;
-            margin-bottom: 8px;
-            border-left: 4px solid #5cb85c;
-            border-radius: 4px;
-            font-family: Calibri, sans-serif;
-            font-size: clamp(12px, 3vw, 14px);
-        }
-        .hidden {
-            display: none;
+            background: #f0fdf4;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #22c55e;
+            font-size: 0.875rem;
+            line-height: 1.5;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            overflow-x: auto;
-            display: block;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
+            font-size: 0.875rem;
+            margin-top: 1rem;
         }
         th, td {
-            padding: 6px;
+            padding: 0.75rem;
             text-align: left;
-            font-size: clamp(10px, 2.5vw, 14px);
+            border-bottom: 1px solid #e5e7eb;
         }
         th {
-            background-color: #f2f2f2;
+            background: #f9fafb;
+            font-weight: 600;
+            color: #1f2937;
         }
-
-        /* Mobile View (< 480px) */
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+                margin: 2rem;
+                padding: 2.5rem;
+            }
+        }
         @media (max-width: 480px) {
             .container {
-                margin: 5px;
-                padding: 10px;
-                gap: 10px;
-            }
-            .form-container, .data-container {
-                margin-bottom: 10px;
-            }
-            .form-group {
-                margin-bottom: 8px;
+                margin: 0.5rem;
+                padding: 1rem;
             }
             select, .data-item {
-                padding: 6px;
-            }
-            table {
-                min-width: 100%;
-            }
-        }
-
-        /* Tablet View (480px - 768px) */
-        @media (min-width: 481px) and (max-width: 768px) {
-            .container {
-                margin: 15px;
-                padding: 15px;
-                gap: 15px;
-            }
-            .form-container, .data-container {
-                flex: 1 1 100%;
-                margin-bottom: 15px;
-            }
-            table {
-                min-width: 100%;
-            }
-        }
-
-        /* Desktop View (> 768px) */
-        @media (min-width: 769px) {
-            .form-container, .data-container {
-                flex: 1 1 45%;
-                margin-bottom: 0;
-            }
-            .container {
-                margin: 20px;
-                padding: 20px;
-                gap: 20px;
+                padding: 0.5rem;
             }
         }
     </style>
@@ -140,20 +99,20 @@
     <div class="container">
         <div class="form-container">
             <div class="form-group">
-                <label for="businessEntities">Select Business Entity:</label>
+                <label for="businessEntities">Select Business Entity</label>
                 <select id="businessEntities" name="businessEntities" onchange="updateMainTopic()" required>
                     <option value="EZECOM">EZECOM</option>
                     <option value="Cellcard">Cellcard</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="mainTopic">Select Main Topic:</label>
+                <label for="mainTopic">Select Main Topic</label>
                 <select id="mainTopic" name="mainTopic" onchange="updateMessageType()" required>
                     <!-- Options will be populated dynamically -->
                 </select>
             </div>
             <div class="form-group">
-                <label for="messageType">Select Message Type:</label>
+                <label for="messageType">Select Message Type</label>
                 <select id="messageType" name="messageType" onchange="displayMessage()" required>
                     <!-- Options will be populated dynamically -->
                 </select>
@@ -166,16 +125,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            updateMainTopic(); // Initialize everything on page load
+            updateMainTopic();
         });
 
         function displayMessage() {
             const businessEntities = document.getElementById('businessEntities').value;
             const messageType = document.getElementById('messageType').value;
             let message = '';
-
-            console.log('Business Entity:', businessEntities);
-            console.log('Message Type:', messageType);
 
             if (messageType === "Email Termination") {
                 message = formatTerminationMessage(businessEntities, businessEntities === "EZECOM" ? "085 888 181" : "012 812 812");
@@ -211,11 +167,11 @@
 
         function formatFirstInvoiceFollowUpMessage() {
             return `
-                <strong>Subject: First Reminder - Follow-Up on Pending Invoice Payment</strong><br><br>
+                <strong class="text-lg text-gray-900">Subject: First Reminder - Follow-Up on Pending Invoice Payment</strong><br><br>
                 Dear [Customer's Name],<br><br>
                 I hope this email finds you well.<br><br>
                 We would like to follow up on the outstanding invoice(s) listed below. Kindly arrange payment at your earliest convenience to avoid any service disruption. Please note that terms and conditions apply.<br><br>
-                <strong>Invoice Details:</strong><br><br>
+                <strong class="text-gray-800">Invoice Details:</strong><br><br>
                 <table>
                     <thead>
                         <tr>
@@ -245,7 +201,7 @@
 
         function formatInvoiceFollowUpMessage(subject) {
             return `
-                <strong>Subject: ${subject}</strong><br><br>
+                <strong class="text-lg text-gray-900">Subject: ${subject}</strong><br><br>
                 Dear [Customer's Name],<br><br>
                 We refer to our previous reminder regarding your overdue invoice(s).<br><br>
                 As of today, payment remains outstanding, and immediate action is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
@@ -279,10 +235,10 @@
 
         function formatThirdInvoiceFollowUpMessage() {
             return `
-                <strong>Subject: Final Reminder - Immediate Payment Required</strong><br><br>
+                <strong class="text-lg text-gray-900">Subject: Final Reminder - Immediate Payment Required</strong><br><br>
                 Dear [Customer's Name],<br><br>
                 This is our final reminder regarding your overdue invoice(s). Immediate payment is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
-                <strong>Invoice Details:</strong><br><br>
+                <strong class="text-gray-800">Invoice Details:</strong><br><br>
                 <table>
                     <thead>
                         <tr>
@@ -305,7 +261,7 @@
                 </table><br>
                 Please ensure full payment is made immediately to avoid service disruption. If payment has already been processed, kindly provide the payment confirmation at your earliest convenience.<br><br>
                 Noted: Failure to settle the outstanding balance by the due date will result in immediate action, which may include disconnecting or dismantling of services.<br><br>
-                For any further assistance, feel free to reach out. We appreciate your urgent attention to this matter.<br><br>
+                For any further assistance, laminar reach out. We appreciate your urgent attention to this matter.<br><br>
                 Best regards,<br>
                 Heng
             `;
@@ -313,7 +269,7 @@
 
         function formatEosEmailReminder(company) {
             return `
-                <strong>Subject: Outstanding Balance Reminder</strong><br><br>
+                <strong class="text-lg text-gray-900">Subject: Outstanding Balance Reminder</strong><br><br>
                 Dear [Customer's Name],<br><br>
                 Overdue Reminder!<br><br>
                 Our record is still shown your overdue invoice hasn't paid yet and please revert the payment now to continue service and avoid interruption.<br><br>
@@ -339,13 +295,13 @@
                         </tr>
                     </tbody>
                 </table><br>
-                For more information, please visit our website at [www.${company.toLowerCase()}.com.kh/support/payment]www.${company.toLowerCase()}.com.kh/support/payment<br><br>
+                For more information, please visit our website at <a href="https://www.${company.toLowerCase()}.com.kh/support/payment" class="text-blue-600 hover:underline">www.${company.toLowerCase()}.com.kh/support/payment</a><br><br>
                 Any inquiries about this invoice, payment, or email to our billing department as per attached below.<br><br>
-                - Email: billing@${company.toLowerCase()}.com.kh,<br>
-                - ${company} APP: <a href="https://${company.toLowerCase()}.page.link/download">https://${company.toLowerCase()}.page.link/download</a><br>
-                - ${company}'s Telegram: <a href="https://t.me/${company}CXbot">https://t.me/${company}CXbot</a><br>
-                - ${company} Facebook Page: <a href="https://www.facebook.com/${company.toLowerCase()}/">https://www.facebook.com/${company.toLowerCase()}/</a><br><br>
-                *Noted If you have already made payment or any special arrangement with ${company}, please help to ignore this email.<br><br>
+                - Email: <a href="mailto:billing@${company.toLowerCase()}.com.kh" class="text-blue-600 hover:underline">billing@${company.toLowerCase()}.com.kh</a><br>
+                - ${company} APP: <a href="https://${company.toLowerCase()}.page.link/download" class="text-blue-600 hover:underline">Download Here</a><br>
+                - ${company}'s Telegram: <a href="https://t.me/${company}CXbot" class="text-blue-600 hover:underline">Telegram Bot</a><br>
+                - ${company} Facebook Page: <a href="https://www.facebook.com/${company.toLowerCase()}/" class="text-blue-600 hover:underline">Facebook</a><br><br>
+                *Noted: If you have already made payment or any special arrangement with ${company}, please help to ignore this email.<br><br>
                 Regards,<br>
                 ${company}
             `;
@@ -353,19 +309,31 @@
 
         function formatEosSmsReminder(company) {
             return `
-                គណនី CID: 255206 សមតុល្យ: $ 15.00 ផុតសុពលភាពនៅថ្ងៃទី១៨ ខែកុម្ភៈ ឆ្នាំ២០២៥ សូមធ្វើការទូរទាត់ប្រាក់ដើម្បីបន្តប្រើប្រាស់សេវាកម្មអ៊ិនធឺណេត។
+                <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
+                    <strong class="text-yellow-800">SMS Reminder:</strong><br>
+                    គណនី CID: 255206 សមតុល្យ: $15.00 ផុតសុពលភាពនៅថ្ងៃទី១៨ ខែកុម្ភៈ ឆ្នាំ២០២៥ សូមធ្វើការទូរទាត់ប្រាក់ដើម្បីបន្តប្រើប្រាស់សេវាកម្មអ៊ិនធឺណេត។
+                </div>
             `;
         }
 
         function formatReimbursementMessage(fromCompany, toCompany) {
+            const subject = fromCompany === "EZECOM" 
+                ? `Request offset from EZECOM ID - ###### to Correct Cellcard ID - ######`
+                : `Request offset from Cellcard ID - ###### to Correct EZECOM ID - ######`;
+            const body = fromCompany === "EZECOM" 
+                ? `Dear AR Team,<br><br>
+                   We hope this email finds you well.<br><br>
+                   A Cellcard's customer mistakenly made a payment to EZECOM. To avoid service disruption, please assist in offsetting and transferring the credit back from EZECOM ID to the correct Cellcard ID account as per the details below:<br><br>`
+                : `Dear AR Team,<br><br>
+                   We hope this email finds you well.<br><br>
+                   An EZECOM's customer mistakenly made a payment to Cellcard. To avoid service disruption, please assist in offsetting and transferring the credit back from Cellcard ID to the correct EZECOM account as per the details below:<br><br>`;
+
             return `
-                <strong>Subject: Request offset with ${toCompany} on Correct ${toCompany} ID - ######</strong><br><br>
-                <strong>Send to:</strong> receivable@ezecomcorp.com, huotdara@cellcard.com.kh<br><br>
-                <strong>CC:</strong> ychanna@ezecom.com.kh, schanpenhbormey@ezecom.com.kh, customercare@cellcard.com.kh, ARprepaid@cellcard.com.kh, peskadervy@ezecom.com.kh, lheng@ezecom.com.kh<br><br>
-                Dear AR Team,<br><br>
-                We hope this email finds you well.<br><br>
-                A ${toCompany} customer mistakenly made a payment to ${fromCompany}. To avoid service disruption, please assist in offsetting and transferring the credit back to the correct ${toCompany} account as per the details below:<br><br>
-                Below are the details of the transaction:<br><br>
+                <strong class="text-lg text-gray-900">Subject: ${subject}</strong><br><br>
+                <strong class="text-gray-800">Send to:</strong> receivable@ezecomcorp.com, huotdara@cellcard.com.kh<br><br>
+                <strong class="text-gray-800">CC:</strong> ychanna@ezecom.com.kh, schanpenhbormey@ezecom.com.kh, customercare@cellcard.com.kh, ARprepaid@cellcard.com.kh, peskadervy@ezecom.com.kh, lheng@ezecom.com.kh<br><br>
+                ${body}
+                <strong class="text-gray-800">Transaction Details:</strong><br><br>
                 <table>
                     <tr>
                         <th>Correct ${toCompany} ID</th>
@@ -388,13 +356,13 @@
 
         function formatTerminationMessage(company, contactNumber) {
             return `
-                <strong>Subject: ${company} - Request Termination form, For Customer CID: 220964, Name: Mr. Namhong Ek</strong><br><br>
+                <strong class="text-lg text-gray-900">Subject: ${company} - Request Termination form, For Customer CID: 220964, Name: Mr. Namhong Ek</strong><br><br>
                 Dear Valued Customer,<br><br>
                 We regret to inform you that we have received your request to terminate your services with ${company}. We understand that this decision was not made lightly, and we appreciate the time you have spent with us.<br><br>
                 As per our service agreement, a 30-day notice period is required for termination. Your subscription will be terminated following your next billing date.<br><br>
                 To proceed with the termination, please complete the attached termination form, sign and stamp it, and return it to us via email or by visiting the nearest ${company} office.<br><br>
                 Should you reconsider your decision or wish to reactivate your account, please contact our hotline at:<br>
-                Contact Number: ${contactNumber}<br><br>
+                <span class="text-blue-600">Contact Number: ${contactNumber}</span><br><br>
                 Thank you for your cooperation and understanding.<br><br>
                 Best regards,<br>
                 ${company}
@@ -403,11 +371,11 @@
 
         function formatReactivationOfferMessage(company) {
             return `
-                <strong>Subject: Special Offer - Reactivate Your ${company} Internet Service Today!</strong><br><br>
+                <strong class="text-lg text-gray-900">Subject: Special Offer - Reactivate Your ${company} Internet Service Today!</strong><br><br>
                 Dear [Customer's Name],<br><br>
                 I hope this email finds you well.<br><br>
                 We noticed that your ${company} internet service has expired, and we’d love to welcome you back with a special reactivation offer! Reconnect today and enjoy seamless internet with exclusive benefits tailored just for you.<br><br>
-                <strong>Account Details:</strong><br><br>
+                <strong class="text-gray-800">Account Details:</strong><br><br>
                 <table>
                     <thead>
                         <tr>
@@ -430,7 +398,7 @@
                         </tr>
                     </tbody>
                 </table><br>
-                To reactivate your service, simply reply to this email or contact our support team at ${company === 'EZECOM' ? '085 888 181' : '012 812 812'}. Don’t miss out—this offer is valid for a limited time only!<br><br>
+                To reactivate your service, simply reply to this email or contact our support team at <span class="text-blue-600">${company === 'EZECOM' ? '085 888 181' : '012 812 812'}</span>. Don’t miss out—this offer is valid for a limited time only!<br><br>
                 We look forward to serving you again.<br><br>
                 Best regards,<br>
                 Heng<br>
@@ -440,11 +408,11 @@
 
         function formatRenewalOfferMessage(company) {
             return `
-                <strong>Subject: Special Offer - Renew Your ${company} Internet Service Before It Expires!</strong><br><br>
+                <strong class="text-lg text-gray-900">Subject: Special Offer - Renew Your ${company} Internet Service Before It Expires!</strong><br><br>
                 Dear [Customer's Name],<br><br>
                 I hope this email finds you well.<br><br>
                 We noticed that your ${company} internet service is nearing its expiry date. To ensure uninterrupted access to your reliable internet connection, we’re offering you a special renewal deal! Renew before your service expires and enjoy continued seamless connectivity with added benefits.<br><br>
-                <strong>Account Details:</strong><br><br>
+                <strong class="text-gray-800">Account Details:</strong><br><br>
                 <table>
                     <thead>
                         <tr>
@@ -467,7 +435,7 @@
                         </tr>
                     </tbody>
                 </table><br>
-                To renew your service and avoid any disruption, please reply to this email or contact our support team at ${company === 'EZECOM' ? '085 888 181' : '012 812 812'} before your expiry date. Act now to take advantage of this limited-time offer!<br><br>
+                To renew your service and avoid any disruption, please reply to this email or contact our support team at <span class="text-blue-600">${company === 'EZECOM' ? '085 888 181' : '012 812 812'}</span> before your expiry date. Act now to take advantage of this limited-time offer!<br><br>
                 We value your continued trust in ${company} and look forward to keeping you connected.<br><br>
                 Best regards,<br>
                 Heng<br>
@@ -483,7 +451,7 @@
                 return;
             }
 
-            mainTopic.innerHTML = ''; // Clear existing options
+            mainTopic.innerHTML = '';
 
             const topics = [
                 'EOS Reminder',
@@ -513,7 +481,7 @@
                 return;
             }
 
-            messageType.innerHTML = ''; // Clear existing options
+            messageType.innerHTML = '';
 
             let options = [];
             if (mainTopic === 'EOS Reminder') {
@@ -527,8 +495,8 @@
                 ];
             } else if (mainTopic === 'Payment Offset') {
                 options = businessEntities === 'EZECOM' ? 
-                    ['Email Offset from EZECOM to Cellcard'] : 
-                    ['Email Offset from Cellcard to EZECOM'];
+                    ['Email Offset from Cellcard to EZECOM'] : 
+                    ['Email Offset from EZECOM to Cellcard'];
             } else if (mainTopic === 'Invoice Follow Up') {
                 options = [
                     'Email Inv. 1st Follow up',
