@@ -12,6 +12,8 @@
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
             margin: 0;
+            height: 100%; /* Ensure the body takes up the full viewport height */
+            overflow: hidden; /* Prevent scrolling */
         }
         .book-wrapper {
             display: flex;
@@ -20,9 +22,8 @@
             background: #ffffff;
             border-radius: 1.5rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            min-height: 600px;
-            height: calc(100vh - 2rem);
-            overflow: auto;
+            height: 93%; /* Match the height of the viewport */
+            overflow: hidden; /* Prevent scrolling */
         }
         .sidebar {
             width: 300px;
@@ -110,7 +111,7 @@
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: #4f46e5 #e0e7ff;
-            min-height: 400px;
+            height: calc(100% - 4rem); /* Adjust to fit within the viewport */
         }
         .template-header {
             display: flex;
