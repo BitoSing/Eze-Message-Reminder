@@ -267,7 +267,7 @@
                 <ul class="msgtype-list collapsible-content">
                     <li><a class="msgtype-link" data-section="Telegram Message" data-type="Renewal Offer">Renewal Offer</a></li>
                     <li><a class="msgtype-link" data-section="Telegram Message" data-type="After Expired Offer">After Expired Offer</a></li>
-                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Notify of Technical Problem">Notify of Technical Problem</a></li>
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Alert for Technical Issue">Alert for Technical Issue</a></li>
                     <li><a class="msgtype-link" data-section="Telegram Message" data-type="Change Plan Confirmation">Change Plan Confirmation</a></li>
                     <li><a class="msgtype-link" data-section="Telegram Message" data-type="Termination Confirmation">Termination Confirmation</a></li>
                 </ul>
@@ -483,6 +483,19 @@
                     EZECOM & CELLCARD
                 `;
             }
+            function formatTelegramAlertForTechnicalIssueMessage() {
+                return `
+                    Dear [Customer Name],<br><br>
+                    We deeply regret the inconvenience caused by your internet service issue. A support ticket has been created, and our technical team is prioritizing a swift resolution. You will be contacted soon.<br><br>
+                    For further assistance, please reach out via:<br><br>
+                    📞 Hotline: 085 888 181<br>
+                    💬 EZECOM Telegram: @EZECOM_Agent_bot<br>
+                    💬 CELLCARD Telegram: @Cellcard_Bot<br><br>
+                    Thank you for your patience and trust in [EZECOM/CELLCARD]. 🌟<br><br>
+                    Sincerely,<br>
+                    EZECOM/CELLCARD
+                `;
+            }
 
             // Message type mapping
             const templateMap = {
@@ -498,7 +511,7 @@
                 "Before Expiry Date Offer": () => formatRenewalOfferMessage("EZECOM"),
                 "Renewal Offer": () => formatTelegramRenewalOfferMessage(),
                 "After Expired Offer": () => formatTelegramAfterExpiredOfferMessage(),
-                "Notify of Technical Problem": () => '<em>Telegram Notify of Technical Problem template not yet implemented.</em>',
+                "Alert for Technical Issue": () => formatTelegramAlertForTechnicalIssueMessage(),
                 "Change Plan Confirmation": () => formatTelegramChangePlanConfirmationMessage(),
                 "Termination Confirmation": () => '<em>Telegram Termination Confirmation template not yet implemented.</em>',
             };
