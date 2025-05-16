@@ -208,6 +208,15 @@
                 <input type="text" id="searchInput" class="search-input" placeholder="Search templates...">
             </div>
             <div id="sidebarContent">
+                <div class="section-title" data-section="incident-report" data-collapsed="true">
+                    Incident Report
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="Incident Report" data-type="Request Incident Report">Request Incident Report</a></li>
+                </ul>
                 <div class="section-title" data-section="service-termination" data-collapsed="true">
                     Service Termination
                     <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,6 +273,18 @@
             console.log('DOM fully loaded and script running');
 
             // Message template functions
+            function formatIncidentReportMessage() {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Request Incident Report of CID: ####, SID: ####, Name: ####</strong><br><br>
+                    Dear Bong,<br><br>
+                    I hope this email finds you well.<br><br>
+                    We would like to seek for your support to provide us the incident report from [DD/MM/YYYY], though the customer encountered internet service’s cut off and demands to compensate the non-usage period back.<br><br>
+                    Your prompt response would be greatly appreciated. Let me know if you require any additional information.<br><br>
+                    Thank you for your cooperation.<br><br>
+                    Best regards,<br>
+                    LY HENG
+                `;
+            }
             function formatFirstInvoiceFollowUpMessage() {
                 return `
                     <strong class="text-lg text-gray-900">Subject: First Reminder - Follow-Up on Pending Invoice Payment</strong><br><br>
@@ -489,6 +510,7 @@
 
             // Message type mapping
             const templateMap = {
+                "Request Incident Report": () => formatIncidentReportMessage(),
                 "EZECOM's Termination": () => formatTerminationMessage("EZECOM", "085 888 181"),
                 "Cellcard's Termination": () => formatTerminationMessage("Cellcard", "012 812 812"),
                 "Cellcard to EZECOM": () => formatReimbursementMessage("Cellcard", "EZECOM"),
