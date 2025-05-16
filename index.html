@@ -13,7 +13,7 @@
             min-height: 100vh;
             margin: 0;
             height: 100%;
-            overflow: hidden;
+            overflow: auto; /* Allow scrolling for the entire page */
         }
         .book-wrapper {
             display: flex;
@@ -22,7 +22,7 @@
             background: #ffffff; /* White background */
             border-radius: 1.5rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            height: 93%;
+            height: auto; /* Allow the wrapper to expand naturally */
             overflow: hidden;
         }
         .sidebar {
@@ -108,10 +108,10 @@
         .content-area {
             flex: 1;
             padding: 2rem;
-            overflow-y: auto;
+            overflow-y: auto; /* Enable vertical scrolling */
             scrollbar-width: thin;
             scrollbar-color: #3b82f6 #e6f0fa; /* Blue scrollbar */
-            height: calc(100% - 4rem);
+            max-height: 100%; /* Ensure it doesn't exceed the viewport height */
             background: #ffffff; /* White background */
         }
         .template-header {
@@ -175,16 +175,19 @@
                 flex-direction: column;
                 margin: 0;
                 border-radius: 0;
-                height: auto;
+                height: auto; /* Allow content to expand naturally */
             }
             .sidebar {
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid #d1e0ff; /* Light blue border */
                 max-height: 30vh;
+                overflow-y: auto; /* Ensure scrolling for long content */
             }
             .content-area {
                 padding: 1.5rem;
+                height: auto; /* Allow content to expand naturally */
+                overflow-y: auto; /* Enable scrolling for content area */
             }
         }
         @media (max-width: 640px) {
@@ -193,6 +196,18 @@
             }
             .data-item {
                 padding: 1rem;
+            }
+            .sidebar {
+                max-height: 40vh; /* Increase height for better usability */
+            }
+            .search-input {
+                font-size: 0.8rem; /* Adjust font size for smaller screens */
+            }
+            .msgtype-link {
+                font-size: 0.8rem; /* Adjust font size for smaller screens */
+            }
+            .content-area {
+                overflow-y: auto; /* Ensure scrolling for smaller screens */
             }
         }
     </style>
