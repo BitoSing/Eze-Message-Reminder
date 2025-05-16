@@ -5,188 +5,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Message Reminder Book</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'Calibri';
-            src: local('Calibri'), local('Calibri Regular');
-            unicode-range: U+0000-00FF, U+0100-024F, U+1E00-1EFF;
-        }
-        @font-face {
-            font-family: 'Khmer OS Siemreap';
-            src: local('Khmer OS Siemreap');
-            unicode-range: U+1780-17FF, U+19E0-19FF;
-        }
         html, body {
-            font-family: 'Calibri', 'Khmer OS Siemreap', Arial, sans-serif;
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
             margin: 0;
-        }
-        body {
-            min-height: 100vh;
-            height: 100vh;
             overflow: hidden;
         }
         .book-wrapper {
             display: flex;
-            flex-direction: row;
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 1.25rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            min-height: 700px;
-            height: 100vh;
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            min-height: 800px;
+            height: calc(100vh - 3rem);
         }
         .sidebar {
-            width: 270px;
-            background: #f9fafb;
-            border-right: 1px solid #e5e7eb;
-            padding: 0 1.2rem 0 2rem;
-            height: 100vh;
+            width: 300px;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+            padding: 1.5rem;
             overflow-y: auto;
-            position: relative;
+            transition: width 0.3s ease;
+        }
+        .sidebar-header {
             display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
         }
         .sidebar h2 {
-            font-size: 1.15rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: #2563eb;
-            margin-top: 2rem;
-            margin-bottom: 1.2rem;
+            color: #1e40af;
+        }
+        .search-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 2rem 0.5rem 2.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
         }
         .section-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: #059669;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
+            color: #047857;
+            margin: 1rem 0 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-title:hover {
+            color: #065f46;
         }
         .msgtype-list {
             list-style: none;
             padding: 0;
-            margin: 0 0 0.5rem 0;
-            max-height: 180px;
+            margin: 0;
+            max-height: 200px;
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #6366f1 #e0e7ff;
-            position: relative;
+            scrollbar-color: #4f46e5 #e0e7ff;
         }
         .msgtype-list::-webkit-scrollbar {
-            width: 12px;
-            background: #e0e7ff;
-            border-radius: 8px;
+            width: 8px;
         }
         .msgtype-list::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #a5b4fc 40%, #6366f1 100%);
-            border-radius: 8px;
-            min-height: 30px;
-            border: 3px solid #e0e7ff;
-            box-shadow: 0 2px 6px #6366f133;
-        }
-        .msgtype-list::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #6366f1 60%, #3730a3 100%);
-        }
-        .msgtype-list::-webkit-scrollbar-corner {
-            background: #e0e7ff;
-        }
-        .msgtype-list.scrollable::after {
-            content: '';
-            display: block;
-            position: absolute;
-            right: 2px;
-            bottom: 8px;
-            width: 18px;
-            height: 18px;
-            background: linear-gradient(135deg, #a5b4fc 60%, #6366f1 100%);
-            mask: url('data:image/svg+xml;utf8,<svg width="18" height="18" viewBox="0 0 20 20" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M10 14a1 1 0 0 1-.7-.29l-4-4a1 1 0 1 1 1.4-1.42L10 11.58l3.3-3.29a1 1 0 1 1 1.4 1.42l-4 4A1 1 0 0 1 10 14z"/></svg>') center/contain no-repeat;
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        .msgtype-list:not(.scrollable)::after {
-            display: none;
-        }
-        .msgtype-list li {
-            margin-bottom: 0.2rem;
+            background: #4f46e5;
+            border-radius: 4px;
         }
         .msgtype-link {
             display: block;
-            padding: 0.45rem 0.8rem;
-            border-radius: 0.4rem;
-            color: #374151;
-            font-size: 0.98rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            color: #1f2937;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: background 0.15s;
-            text-decoration: none;
+            transition: all 0.2s ease;
         }
-        .msgtype-link.active, .msgtype-link:hover {
+        .msgtype-link:hover, .msgtype-link.active {
             background: #e0e7ff;
-            color: #1d4ed8;
-            font-weight: 600;
+            color: #1e40af;
+            font-weight: 500;
         }
         .content-area {
-            flex: 1 1 0;
-            padding: 2rem 2.5rem 2rem 2rem;
+            flex: 1;
+            padding: 2rem;
             overflow-y: auto;
-            min-width: 0;
-            max-height: 100vh;
             scrollbar-width: thin;
-            scrollbar-color: #6366f1 #e0e7ff;
-            box-sizing: border-box;
+            scrollbar-color: #4f46e5 #e0e7ff;
+        }
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
         }
         .template-title {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: #059669;
-            margin-bottom: 1.2rem;
+            color: #047857;
+        }
+        .copy-button {
+            padding: 0.5rem 1rem;
+            background: #4f46e5;
+            color: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .copy-button:hover {
+            background: #4338ca;
         }
         .data-item {
-            background: #f0fdf4;
-            padding: 1.25rem 1rem;
+            background: #ecfdf5;
+            padding: 1.5rem;
             border-radius: 0.75rem;
-            border-left: 5px solid #22c55e;
-            font-size: 1rem;
-            line-height: 1.3;
-            word-break: break-word;
-        }
-        .data-item p {
-            margin-bottom: 0.5em;
+            border-left: 6px solid #10b981;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.98rem;
-            margin-top: 1rem;
+            font-size: 0.9rem;
+            margin: 1rem 0;
         }
         th, td {
-            padding: 0.7rem 0.5rem;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
         }
         th {
-            background: #f9fafb;
+            background: #f8fafc;
             font-weight: 600;
             color: #1f2937;
         }
-        @media (max-width: 900px) {
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .collapsible-content.open {
+            max-height: 200px; /* Matches max-height in .msgtype-list */
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        @media (max-width: 1024px) {
             .book-wrapper {
                 flex-direction: column;
-                min-height: unset;
-                height: auto;
+                margin: 0;
+                border-radius: 0;
+                height: 100vh;
             }
             .sidebar {
                 width: 100%;
                 border-right: none;
-                border-bottom: 1px solid #e5e7eb;
-                padding: 1.2rem 1rem;
-                height: auto;
-                max-height: 300px;
+                border-bottom: 1px solid #e2e8f0;
+                max-height: 40vh;
             }
             .content-area {
-                padding: 1.2rem 1rem;
-                max-height: unset;
+                padding: 1.5rem;
+            }
+        }
+        @media (max-width: 640px) {
+            .template-title {
+                font-size: 1.25rem;
+            }
+            .data-item {
+                padding: 1rem;
             }
         }
     </style>
@@ -194,354 +197,541 @@
 <body>
     <div class="book-wrapper">
         <nav class="sidebar">
-            <h2>Message Reminder Book</h2>
-            <div>
-                <div class="section-title">EOS Reminder</div>
-                <ul class="msgtype-list">
+            <div class="sidebar-header">
+                <h2>Message Reminder Book</h2>
+            </div>
+            <div class="search-container">
+                <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search templates...">
+            </div>
+            <div id="sidebarContent">
+                <div class="section-title" data-section="eos-reminder" data-collapsed="true">
+                    EOS Reminder
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
                     <li><a class="msgtype-link" data-section="EOS Reminder" data-type="EOS SMS Reminder">EOS SMS Reminder</a></li>
                     <li><a class="msgtype-link" data-section="EOS Reminder" data-type="EOS Email Reminder">EOS Email Reminder</a></li>
                 </ul>
-                <div class="section-title">Service Termination</div>
-                <ul class="msgtype-list">
+                <div class="section-title" data-section="service-termination" data-collapsed="true">
+                    Service Termination
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
                     <li><a class="msgtype-link" data-section="Service Termination" data-type="EZECOM's Termination">EZECOM's Termination</a></li>
                     <li><a class="msgtype-link" data-section="Service Termination" data-type="Cellcard's Termination">Cellcard's Termination</a></li>
                 </ul>
-                <div class="section-title">Payment Offset</div>
-                <ul class="msgtype-list">
+                <div class="section-title" data-section="payment-offset" data-collapsed="true">
+                    Payment Offset
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
                     <li><a class="msgtype-link" data-section="Payment Offset" data-type="Cellcard to EZECOM">Cellcard to EZECOM</a></li>
                     <li><a class="msgtype-link" data-section="Payment Offset" data-type="EZECOM to Cellcard">EZECOM to Cellcard</a></li>
                 </ul>
-                <div class="section-title">Invoice Follow Up</div>
-                <ul class="msgtype-list">
+                <div class="section-title" data-section="invoice-follow-up" data-collapsed="true">
+                    Invoice Follow Up
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
                     <li><a class="msgtype-link" data-section="Invoice Follow Up" data-type="1st Follow up">1st Follow up</a></li>
                     <li><a class="msgtype-link" data-section="Invoice Follow Up" data-type="2nd Follow up">2nd Follow up</a></li>
                     <li><a class="msgtype-link" data-section="Invoice Follow Up" data-type="3rd Follow up">3rd Follow up</a></li>
                 </ul>
-                <div class="section-title">Renewal/Reactivation Offer</div>
-                <ul class="msgtype-list">
+                <div class="section-title" data-section="renewal-reactivation" data-collapsed="true">
+                    Renewal/Reactivation Offer
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
                     <li><a class="msgtype-link" data-section="Renewal/Reactivation Offer" data-type="After Expiry Date Offer">After Expiry Date Offer</a></li>
                     <li><a class="msgtype-link" data-section="Renewal/Reactivation Offer" data-type="Before Expiry Date Offer">Before Expiry Date Offer</a></li>
                 </ul>
             </div>
         </nav>
         <main class="content-area">
-            <div id="templateTitle" class="template-title">Select a message type to view the template</div>
+            <div class="template-header">
+                <div id="templateTitle" class="template-title">Select a message type to view the template</div>
+                <button id="copyButton" class="copy-button hidden">Copy Template</button>
+            </div>
             <div id="templateContent" class="data-item"></div>
         </main>
     </div>
     <script>
-        // Message template functions (same as before)
-        function formatFirstInvoiceFollowUpMessage() {
-            return `
-                <strong class="text-lg text-gray-900">Subject: First Reminder - Follow-Up on Pending Invoice Payment</strong><br><br>
-                Dear [Customer's Name],<br><br>
-                I hope this email finds you well.<br><br>
-                We would like to follow up on the outstanding invoice(s) listed below. Kindly arrange payment at your earliest convenience to avoid any service disruption. Please note that terms and conditions apply.<br><br>
-                <strong class="text-gray-800">Invoice Details:</strong><br><br>
-                <table>
-                    <thead>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Message template functions
+            function formatFirstInvoiceFollowUpMessage() {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: First Reminder - Follow-Up on Pending Invoice Payment</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    I hope this email finds you well.<br><br>
+                    We would like to follow up on the outstanding invoice(s) listed below. Kindly arrange payment at your earliest convenience to avoid any service disruption. Please note that terms and conditions apply.<br><br>
+                    <strong class="text-gray-800">Invoice Details:</strong><br><br>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Invoice Number</th>
+                                <th>Customer ID</th>
+                                <th>Customer Name</th>
+                                <th>Amount Pending</th>
+                                <th>Invoice Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>XXXXXXX</td>
+                                <td>XXXXXXX</td>
+                                <td>####</td>
+                                <td>$XXX.XX</td>
+                                <td>01-Mar-25</td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    Should you require any further details or have already processed the payment, please disregard this email and kindly share the payment confirmation with us.<br><br>
+                    We appreciate your prompt attention to this matter.<br><br>
+                    Best regards,<br>
+                    Heng
+                `;
+            }
+            function formatInvoiceFollowUpMessage(subject) {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: ${subject}</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    We refer to our previous reminder regarding your overdue invoice(s).<br><br>
+                    As of today, payment remains outstanding, and immediate action is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Invoice Number</th>
+                                <th>Customer ID</th>
+                                <th>Customer Name</th>
+                                <th>Amount Pending</th>
+                                <th>Invoice Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>XXXXXXX</td>
+                                <td>XXXXXXX</td>
+                                <td>####</td>
+                                <td>$XXX.XX</td>
+                                <td>01-Mar-25</td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    Please ensure full payment is made by Final Due Date to avoid service disruption. If payment has already been processed, kindly provide the payment confirmation at your earliest convenience.<br><br>
+                    Noted: Failure to settle the outstanding balance by the due date will result in immediate action, which may include disconnecting or dismantling of services.<br><br>
+                    For any further assistance, feel free to reach out. We appreciate your urgent attention to this matter.<br><br>
+                    Best regards,<br>
+                    Heng
+                `;
+            }
+            function formatThirdInvoiceFollowUpMessage() {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Final Reminder - Immediate Payment Required</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    This is our final reminder regarding your overdue invoice(s). Immediate payment is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
+                    <strong class="text-gray-800">Invoice Details:</strong><br><br>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Invoice Number</th>
+                                <th>Customer ID</th>
+                                <th>Customer Name</th>
+                                <th>Amount Pending</th>
+                                <th>Invoice Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>XXXXXXX</td>
+                                <td>XXXXXXX</td>
+                                <td>####</td>
+                                <td>$XXX.XX</td>
+                                <td>01-Mar-25</td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    Please ensure full payment is made immediately to avoid service disruption. If payment has already been processed, kindly provide the payment confirmation at your earliest convenience.<br><br>
+                    Noted: Failure to settle the outstanding balance by the due date will result in immediate action, which may include disconnecting or dismantling of services.<br><br>
+                    For any further assistance, please reach out. We appreciate your urgent attention to this matter.<br><br>
+                    Best regards,<br>
+                    Heng
+                `;
+            }
+            function formatEosEmailReminder(company) {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Outstanding Balance Reminder</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    Overdue Reminder!<br><br>
+                    Our record is still shown your overdue invoice hasn't paid yet and please revert the payment now to continue service and avoid interruption.<br><br>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Customer Name</th>
+                                <th>Invoice ID</th>
+                                <th>Invoice Due Date</th>
+                                <th>Amount</th>
+                                <th>Open Day</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>239833</td>
+                                <td>MC MEDICAL CO.,LTD</td>
+                                <td>2064953</td>
+                                <td>2025-03-17 00:12:00</td>
+                                <td>119</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    For more information, please visit our website at <a href="https://www.${company.toLowerCase()}.com.kh/support/payment" class="text-blue-600 hover:underline">www.${company.toLowerCase()}.com.kh/support/payment</a><br><br>
+                    Any inquiries about this invoice, payment, or email to our billing department as per attached below.<br><br>
+                    - Email: <a href="mailto:billing@${company.toLowerCase()}.com.kh" class="text-blue-600 hover:underline">billing@${company.toLowerCase()}.com.kh</a><br>
+                    - ${company} APP: <a href="https://${company.toLowerCase()}.page.link/download" class="text-blue-600 hover:underline">Download Here</a><br>
+                    - ${company}'s Telegram: <a href="https://t.me/${company}CXbot" class="text-blue-600 hover:underline">Telegram Bot</a><br>
+                    - ${company} Facebook Page: <a href="https://www.facebook.com/${company.toLowerCase()}/" class="text-blue-600 hover:underline">Facebook</a><br><br>
+                    *Noted: If you have already made payment or any special arrangement with ${company}, please help to ignore this email.<br><br>
+                    Regards,<br>
+                    ${company}
+                `;
+            }
+            function formatEosSmsReminder(company) {
+                return `
+                    <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
+                        <strong class="text-yellow-800">SMS Reminder:</strong><br>
+                        គណនី CID: 255206 សមតុល្យ: $15.00 ផុតសុពលភាពនៅថ្ងៃទី១៨ ខែកុម្ភៈ ឆ្នាំ២០២៥ សូមធ្វើការទូរទាត់ប្រាក់ដើម្បីបន្តប្រើប្រាស់សេវាកម្មអ៊ិនធឺណេត។
+                    </div>
+                `;
+            }
+            function formatReimbursementMessage(fromCompany, toCompany) {
+                const subject = fromCompany === "EZECOM" 
+                    ? `Request offset from EZECOM ID - ###### to Correct Cellcard ID - ######`
+                    : `Request offset from Cellcard ID - ###### to Correct EZECOM ID - ######`;
+                const body = fromCompany === "EZECOM" 
+                    ? `Dear AR Team,<br><br>
+                       We hope this email finds you well.<br><br>
+                       A Cellcard's customer mistakenly made a payment to EZECOM. To avoid service disruption, please assist in offsetting and transferring the credit back from EZECOM ID to the correct Cellcard ID account as per the details below:<br><br>`
+                    : `Dear AR Team,<br><br>
+                       We hope this email finds you well.<br><br>
+                       An EZECOM's customer mistakenly made a payment to Cellcard. To avoid service disruption, please assist in offsetting and transferring the credit back from Cellcard ID to the correct EZECOM account as per the details below:<br><br>`;
+
+                return `
+                    <strong class="text-lg text-gray-900">Subject: ${subject}</strong><br><br>
+                    <strong class="text-gray-800">Send to:</strong> receivable@ezecomcorp.com, huotdara@cellcard.com.kh<br><br>
+                    <strong class="text-gray-800">CC:</strong> ychanna@ezecom.com.kh, schanpenhbormey@ezecom.com.kh, customercare@cellcard.com.kh, ARprepaid@cellcard.com.kh, peskadervy@ezecom.com.kh, lheng@ezecom.com.kh<br><br>
+                    ${body}
+                    <strong class="text-gray-800">Transaction Details:</strong><br><br>
+                    <table>
                         <tr>
-                            <th>Invoice Number</th>
-                            <th>Customer ID</th>
+                            <th>Correct ${toCompany} ID</th>
                             <th>Customer Name</th>
-                            <th>Amount Pending</th>
-                            <th>Invoice Due Date</th>
+                            <th>Transaction Date</th>
+                            <th>Amount Paid</th>
                         </tr>
-                    </thead>
-                    <tbody>
                         <tr>
-                            <td>XXXXXXX</td>
-                            <td>XXXXXXX</td>
-                            <td>####</td>
-                            <td>$XXX.XX</td>
+                            <td>######</td>
+                            <td>######</td>
                             <td>01-Mar-25</td>
+                            <td>$108</td>
                         </tr>
-                    </tbody>
-                </table><br>
-                Should you require any further details or have already processed the payment, please disregard this email and kindly share the payment confirmation with us.<br><br>
-                We appreciate your prompt attention to this matter.<br><br>
-                Best regards,<br>
-                Heng
-            `;
-        }
-        function formatInvoiceFollowUpMessage(subject) {
-            return `
-                <strong class="text-lg text-gray-900">Subject: ${subject}</strong><br><br>
-                Dear [Customer's Name],<br><br>
-                We refer to our previous reminder regarding your overdue invoice(s).<br><br>
-                As of today, payment remains outstanding, and immediate action is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Invoice Number</th>
-                            <th>Customer ID</th>
-                            <th>Customer Name</th>
-                            <th>Amount Pending</th>
-                            <th>Invoice Due Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>XXXXXXX</td>
-                            <td>XXXXXXX</td>
-                            <td>####</td>
-                            <td>$XXX.XX</td>
-                            <td>01-Mar-25</td>
-                        </tr>
-                    </tbody>
-                </table><br>
-                Please ensure full payment is made by Final Due Date to avoid service disruption. If payment has already been processed, kindly provide the payment confirmation at your earliest convenience.<br><br>
-                Noted: Failure to settle the outstanding balance by the due date will result in immediate action, which may include disconnecting or dismantling of services.<br><br>
-                For any further assistance, feel free to reach out. We appreciate your urgent attention to this matter.<br><br>
-                Best regards,<br>
-                Heng
-            `;
-        }
-        function formatThirdInvoiceFollowUpMessage() {
-            return `
-                <strong class="text-lg text-gray-900">Subject: Final Reminder - Immediate Payment Required</strong><br><br>
-                Dear [Customer's Name],<br><br>
-                This is our final reminder regarding your overdue invoice(s). Immediate payment is required to avoid service disconnection or dismantling as per our terms and conditions.<br><br>
-                <strong class="text-gray-800">Invoice Details:</strong><br><br>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Invoice Number</th>
-                            <th>Customer ID</th>
-                            <th>Customer Name</th>
-                            <th>Amount Pending</th>
-                            <th>Invoice Due Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>XXXXXXX</td>
-                            <td>XXXXXXX</td>
-                            <td>####</td>
-                            <td>$XXX.XX</td>
-                            <td>01-Mar-25</td>
-                        </tr>
-                    </tbody>
-                </table><br>
-                Please ensure full payment is made immediately to avoid service disruption. If payment has already been processed, kindly provide the payment confirmation at your earliest convenience.<br><br>
-                Noted: Failure to settle the outstanding balance by the due date will result in immediate action, which may include disconnecting or dismantling of services.<br><br>
-                For any further assistance, laminar reach out. We appreciate your urgent attention to this matter.<br><br>
-                Best regards,<br>
-                Heng
-            `;
-        }
-        function formatEosEmailReminder(company) {
-            return `
-                <strong class="text-lg text-gray-900">Subject: Outstanding Balance Reminder</strong><br><br>
-                Dear [Customer's Name],<br><br>
-                Overdue Reminder!<br><br>
-                Our record is still shown your overdue invoice hasn't paid yet and please revert the payment now to continue service and avoid interruption.<br><br>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Customer ID</th>
-                            <th>Customer Name</th>
-                            <th>Invoice ID</th>
-                            <th>Invoice Due Date</th>
-                            <th>Amount</th>
-                            <th>Open Day</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>239833</td>
-                            <td>MC MEDICAL CO.,LTD</td>
-                            <td>2064953</td>
-                            <td>2025-03-17 00:12:00</td>
-                            <td>119</td>
-                            <td>1</td>
-                        </tr>
-                    </tbody>
-                </table><br>
-                For more information, please visit our website at <a href="https://www.${company.toLowerCase()}.com.kh/support/payment" class="text-blue-600 hover:underline">www.${company.toLowerCase()}.com.kh/support/payment</a><br><br>
-                Any inquiries about this invoice, payment, or email to our billing department as per attached below.<br><br>
-                - Email: <a href="mailto:billing@${company.toLowerCase()}.com.kh" class="text-blue-600 hover:underline">billing@${company.toLowerCase()}.com.kh</a><br>
-                - ${company} APP: <a href="https://${company.toLowerCase()}.page.link/download" class="text-blue-600 hover:underline">Download Here</a><br>
-                - ${company}'s Telegram: <a href="https://t.me/${company}CXbot" class="text-blue-600 hover:underline">Telegram Bot</a><br>
-                - ${company} Facebook Page: <a href="https://www.facebook.com/${company.toLowerCase()}/" class="text-blue-600 hover:underline">Facebook</a><br><br>
-                *Noted: If you have already made payment or any special arrangement with ${company}, please help to ignore this email.<br><br>
-                Regards,<br>
-                ${company}
-            `;
-        }
-        function formatEosSmsReminder(company) {
-            return `
-                <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
-                    <strong class="text-yellow-800">SMS Reminder:</strong><br>
-                    គណនី CID: 255206 សមតុល្យ: $15.00 ផុតសុពលភាពនៅថ្ងៃទី១៨ ខែកុម្ភៈ ឆ្នាំ២០២៥ សូមធ្វើការទូរទាត់ប្រាក់ដើម្បីបន្តប្រើប្រាស់សេវាកម្មអ៊ិនធឺណេត។
-                </div>
-            `;
-        }
-        function formatReimbursementMessage(fromCompany, toCompany) {
-            const subject = fromCompany === "EZECOM" 
-                ? `Request offset from EZECOM ID - ###### to Correct Cellcard ID - ######`
-                : `Request offset from Cellcard ID - ###### to Correct EZECOM ID - ######`;
-            const body = fromCompany === "EZECOM" 
-                ? `Dear AR Team,<br><br>
-                   We hope this email finds you well.<br><br>
-                   A Cellcard's customer mistakenly made a payment to EZECOM. To avoid service disruption, please assist in offsetting and transferring the credit back from EZECOM ID to the correct Cellcard ID account as per the details below:<br><br>`
-                : `Dear AR Team,<br><br>
-                   We hope this email finds you well.<br><br>
-                   An EZECOM's customer mistakenly made a payment to Cellcard. To avoid service disruption, please assist in offsetting and transferring the credit back from Cellcard ID to the correct EZECOM account as per the details below:<br><br>`;
+                    </table><br>
+                    Kindly let us know if any additional information is required. Your prompt assistance would be greatly appreciated.<br><br>
+                    Thank you for your cooperation.<br><br>
+                    Best regards,
+                `;
+            }
+            function formatTerminationMessage(company, contactNumber) {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: ${company} - Request Termination form, For Customer CID: 220964, Name: Mr. Namhong Ek</strong><br><br>
+                    Dear Valued Customer,<br><br>
+                    We regret to inform you that we have received your request to terminate your services with ${company}. We understand that this decision was not made lightly, and we appreciate the time you have spent with us.<br><br>
+                    As per our service agreement, a 30-day notice period is required for termination. Your subscription will be terminated following your next billing date.<br><br>
+                    To proceed with the termination, please complete the attached termination form, sign and stamp it, and return it to us via email or by visiting the nearest ${company} office.<br><br>
+                    Should you reconsider your decision or wish to reactivate your account, please contact our hotline at:<br>
+                    <span class="text-blue-600">Contact Number: ${contactNumber}</span><br><br>
+                    Thank you for your cooperation and understanding.<br><br>
+                    Best regards,<br>
+                    ${company}
+                `;
+            }
+            function formatReactivationOfferMessage(company) {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Special Offer - Reactivate Your ${company} Internet Service Today!</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    I hope this email finds you well.<br><br>
+                    We noticed that your ${company} internet service has expired, and we’d love to welcome you back with a special reactivation offer! Reconnect today and enjoy seamless internet with exclusive benefits tailored just for you.<br><br>
+                    <strong class="text-gray-800">Account Details:</strong><br><br>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Customer Name</th>
+                                <th>Current Plan</th>
+                                <th>Billing Date</th>
+                                <th>Renewal Offer</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>XXXXXXX</td>
+                                <td>[Customer's Name]</td>
+                                <td>10 Mbps Plan</td>
+                                <td>01-Apr-25</td>
+                                <td>50% Off First Month</td>
+                                <td>$XX.XX</td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    To reactivate your service, simply reply to this email or contact our support team at <span class="text-blue-600">${company === 'EZECOM' ? '085 888 181' : '012 812 812'}</span>. Don’t miss out—this offer is valid for a limited time only!<br><br>
+                    We look forward to serving you again.<br><br>
+                    Best regards,<br>
+                    Heng<br>
+                    ${company} Team
+                `;
+            }
+            function formatRenewalOfferMessage(company) {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Special Offer - Renew Your ${company} Internet Service Before It Expires!</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    I hope this email finds you well.<br><br>
+                    We noticed that your ${company} internet service is nearing its expiry date. To ensure uninterrupted access to your reliable internet connection, we’re offering you a special renewal deal! Renew before your service expires and enjoy continued seamless connectivity with added benefits.<br><br>
+                    <strong class="text-gray-800">Account Details:</strong><br><br>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Customer Name</th>
+                                <th>Current Plan</th>
+                                <th>Billing Date</th>
+                                <th>Renewal Offer</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>XXXXXXX</td>
+                                <td>[Customer's Name]</td>
+                                <td>10 Mbps Plan</td>
+                                <td>01-Apr-25</td>
+                                <td>10% Off Next Month</td>
+                                <td>$XX.XX</td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    To renew your service and avoid any disruption, please reply to this email or contact our support team at <span class="text-blue-600">${company === 'EZECOM' ? '085 888 181' : '012 812 812'}</span> before your expiry date. Act now to take advantage of this limited-time offer!<br><br>
+                    We value your continued trust in ${company} and look forward to keeping you connected.<br><br>
+                    Best regards,<br>
+                    Heng<br>
+                    ${company} Team
+                `;
+            }
 
-            return `
-                <strong class="text-lg text-gray-900">Subject: ${subject}</strong><br><br>
-                <strong class="text-gray-800">Send to:</strong> receivable@ezecomcorp.com, huotdara@cellcard.com.kh<br><br>
-                <strong class="text-gray-800">CC:</strong> ychanna@ezecom.com.kh, schanpenhbormey@ezecom.com.kh, customercare@cellcard.com.kh, ARprepaid@cellcard.com.kh, peskadervy@ezecom.com.kh, lheng@ezecom.com.kh<br><br>
-                ${body}
-                <strong class="text-gray-800">Transaction Details:</strong><br><br>
-                <table>
-                    <tr>
-                        <th>Correct ${toCompany} ID</th>
-                        <th>Customer Name</th>
-                        <th>Transaction Date</th>
-                        <th>Amount Paid</th>
-                    </tr>
-                    <tr>
-                        <td>######</td>
-                        <td>######</td>
-                        <td>01-Mar-25</td>
-                        <td>$108</td>
-                    </tr>
-                </table><br>
-                Kindly let us know if any additional information is required. Your prompt assistance would be greatly appreciated.<br><br>
-                Thank you for your cooperation.<br><br>
-                Best regards,
-            `;
-        }
-        function formatTerminationMessage(company, contactNumber) {
-            return `
-                <strong class="text-lg text-gray-900">Subject: ${company} - Request Termination form, For Customer CID: 220964, Name: Mr. Namhong Ek</strong><br><br>
-                Dear Valued Customer,<br><br>
-                We regret to inform you that we have received your request to terminate your services with ${company}. We understand that this decision was not made lightly, and we appreciate the time you have spent with us.<br><br>
-                As per our service agreement, a 30-day notice period is required for termination. Your subscription will be terminated following your next billing date.<br><br>
-                To proceed with the termination, please complete the attached termination form, sign and stamp it, and return it to us via email or by visiting the nearest ${company} office.<br><br>
-                Should you reconsider your decision or wish to reactivate your account, please contact our hotline at:<br>
-                <span class="text-blue-600">Contact Number: ${contactNumber}</span><br><br>
-                Thank you for your cooperation and understanding.<br><br>
-                Best regards,<br>
-                ${company}
-            `;
-        }
-        function formatReactivationOfferMessage(company) {
-            return `
-                <strong class="text-lg text-gray-900">Subject: Special Offer - Reactivate Your ${company} Internet Service Today!</strong><br><br>
-                Dear [Customer's Name],<br><br>
-                I hope this email finds you well.<br><br>
-                We noticed that your ${company} internet service has expired, and we’d love to welcome you back with a special reactivation offer! Reconnect today and enjoy seamless internet with exclusive benefits tailored just for you.<br><br>
-                <strong class="text-gray-800">Account Details:</strong><br><br>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Customer ID</th>
-                            <th>Customer Name</th>
-                            <th>Current Plan</th>
-                            <th>Billing Date</th>
-                            <th>Renewal Offer</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>XXXXXXX</td>
-                            <td>[Customer's Name]</td>
-                            <td>10 Mbps Plan</td>
-                            <td>01-Apr-25</td>
-                            <td>50% Off First Month</td>
-                            <td>$XX.XX</td>
-                        </tr>
-                    </tbody>
-                </table><br>
-                To reactivate your service, simply reply to this email or contact our support team at <span class="text-blue-600">${company === 'EZECOM' ? '085 888 181' : '012 812 812'}</span>. Don’t miss out—this offer is valid for a limited time only!<br><br>
-                We look forward to serving you again.<br><br>
-                Best regards,<br>
-                Heng<br>
-                ${company} Team
-            `;
-        }
-        function formatRenewalOfferMessage(company) {
-            return `
-                <strong class="text-lg text-gray-900">Subject: Special Offer - Renew Your ${company} Internet Service Before It Expires!</strong><br><br>
-                Dear [Customer's Name],<br><br>
-                I hope this email finds you well.<br><br>
-                We noticed that your ${company} internet service is nearing its expiry date. To ensure uninterrupted access to your reliable internet connection, we’re offering you a special renewal deal! Renew before your service expires and enjoy continued seamless connectivity with added benefits.<br><br>
-                <strong class="text-gray-800">Account Details:</strong><br><br>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Customer ID</th>
-                            <th>Customer Name</th>
-                            <th>Current Plan</th>
-                            <th>Billing Date</th>
-                            <th>Renewal Offer</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>XXXXXXX</td>
-                            <td>[Customer's Name]</td>
-                            <td>10 Mbps Plan</td>
-                            <td>01-Apr-25</td>
-                            <td>10% Off Next Month</td>
-                            <td>$XX.XX</td>
-                        </tr>
-                    </tbody>
-                </table><br>
-                To renew your service and avoid any disruption, please reply to this email or contact our support team at <span class="text-blue-600">${company === 'EZECOM' ? '085 888 181' : '012 812 812'}</span> before your expiry date. Act now to take advantage of this limited-time offer!<br><br>
-                We value your continued trust in ${company} and look forward to keeping you connected.<br><br>
-                Best regards,<br>
-                Heng<br>
-                ${company} Team
-            `;
-        }
+            // Message type mapping
+            const templateMap = {
+                "EOS SMS Reminder": () => formatEosSmsReminder("EZECOM"),
+                "EOS Email Reminder": () => formatEosEmailReminder("EZECOM"),
+                "EZECOM's Termination": () => formatTerminationMessage("EZECOM", "085 888 181"),
+                "Cellcard's Termination": () => formatTerminationMessage("Cellcard", "012 812 812"),
+                "Cellcard to EZECOM": () => formatReimbursementMessage("Cellcard", "EZECOM"),
+                "EZECOM to Cellcard": () => formatReimbursementMessage("EZECOM", "Cellcard"),
+                "1st Follow up": () => formatFirstInvoiceFollowUpMessage(),
+                "2nd Follow up": () => formatInvoiceFollowUpMessage("Second Reminder - Urgent Payment Required"),
+                "3rd Follow up": () => formatThirdInvoiceFollowUpMessage(),
+                "After Expiry Date Offer": () => formatReactivationOfferMessage("EZECOM"),
+                "Before Expiry Date Offer": () => formatRenewalOfferMessage("EZECOM"),
+            };
 
-        // Message type mapping
-        const templateMap = {
-            "EOS SMS Reminder": () => formatEosSmsReminder("EZECOM"),
-            "EOS Email Reminder": () => formatEosEmailReminder("EZECOM"),
-            "EZECOM's Termination": () => formatTerminationMessage("EZECOM", "085 888 181"),
-            "Cellcard's Termination": () => formatTerminationMessage("Cellcard", "012 812 812"),
-            "Cellcard to EZECOM": () => formatReimbursementMessage("Cellcard", "EZECOM"),
-            "EZECOM to Cellcard": () => formatReimbursementMessage("EZECOM", "Cellcard"),
-            "1st Follow up": () => formatFirstInvoiceFollowUpMessage(),
-            "2nd Follow up": () => formatInvoiceFollowUpMessage("Second Reminder - Urgent Payment Required"),
-            "3rd Follow up": () => formatThirdInvoiceFollowUpMessage(),
-            "After Expiry Date Offer": () => formatReactivationOfferMessage("EZECOM"),
-            "Before Expiry Date Offer": () => formatRenewalOfferMessage("EZECOM"),
-        };
+            // UI logic
+            const state = {
+                activeLink: null,
+                searchQuery: '',
+            };
 
-        // UI logic
-        document.querySelectorAll('.msgtype-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.msgtype-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                const type = this.getAttribute('data-type');
-                document.getElementById('templateTitle').textContent = type;
-                const templateFn = templateMap[type];
-                document.getElementById('templateContent').innerHTML = templateFn ? templateFn() : '<em>No template found.</em>';
-            });
-        });
+            function updateUI() {
+                try {
+                    const links = document.querySelectorAll('.msgtype-link');
+                    links.forEach(link => {
+                        const type = link.getAttribute('data-type')?.toLowerCase() || '';
+                        const section = link.getAttribute('data-section')?.toLowerCase() || '';
+                        const matchesSearch = state.searchQuery === '' || 
+                            type.includes(state.searchQuery.toLowerCase()) || 
+                            section.includes(state.searchQuery.toLowerCase());
+                        const parentLi = link.parentElement;
+                        if (parentLi) {
+                            parentLi.style.display = matchesSearch ? 'block' : 'none';
+                        }
+                    });
 
-        // Add scrollable class if scroll is needed for msgtype-list
-        function updateScrollIcons() {
-            document.querySelectorAll('.msgtype-list').forEach(list => {
-                if (list.scrollHeight > list.clientHeight) {
-                    list.classList.add('scrollable');
-                } else {
-                    list.classList.remove('scrollable');
+                    // Show/hide sections based on search results
+                    document.querySelectorAll('.section-title').forEach(title => {
+                        const content = title.nextElementSibling;
+                        if (!content) return;
+                        const sectionLinks = content.querySelectorAll('.msgtype-link');
+                        let hasVisibleLinks = false;
+                        sectionLinks.forEach(link => {
+                            const parentLi = link.parentElement;
+                            if (parentLi && parentLi.style.display !== 'none') {
+                                hasVisibleLinks = true;
+                            }
+                        });
+                        title.style.display = hasVisibleLinks ? 'flex' : 'none';
+                        content.style.display = hasVisibleLinks ? 'block' : 'none';
+                    });
+                } catch (error) {
+                    console.error('Error in updateUI:', error);
                 }
-            });
-        }
-        window.addEventListener('DOMContentLoaded', updateScrollIcons);
-        window.addEventListener('resize', updateScrollIcons);
+            }
+
+            // Initialize collapsible sections
+            try {
+                const sectionTitles = document.querySelectorAll('.section-title');
+                sectionTitles.forEach(title => {
+                    const content = title.nextElementSibling;
+                    if (!content) {
+                        console.warn('No content found for section title:', title);
+                        return;
+                    }
+                    // Ensure initial state
+                    if (title.getAttribute('data-collapsed') === 'true') {
+                        content.classList.remove('open');
+                        content.style.maxHeight = '0';
+                    } else {
+                        content.classList.add('open');
+                        content.style.maxHeight = `${content.scrollHeight}px`;
+                    }
+
+                    title.addEventListener('click', () => {
+                        try {
+                            const isCollapsed = title.getAttribute('data-collapsed') === 'true';
+                            title.setAttribute('data-collapsed', !isCollapsed);
+                            content.classList.toggle('open');
+                            content.style.maxHeight = isCollapsed ? `${content.scrollHeight}px` : '0';
+                            const svg = title.querySelector('svg');
+                            if (svg) {
+                                svg.classList.toggle('rotate-180');
+                            }
+                        } catch (error) {
+                            console.error('Error in section title click:', error);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error initializing collapsible sections:', error);
+            }
+
+            // Handle template selection
+            try {
+                const msgTypeLinks = document.querySelectorAll('.msgtype-link');
+                msgTypeLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        try {
+                            e.preventDefault();
+                            if (state.activeLink) {
+                                state.activeLink.classList.remove('active');
+                            }
+                            this.classList.add('active');
+                            state.activeLink = this;
+
+                            const type = this.getAttribute('data-type');
+                            const templateTitle = document.getElementById('templateTitle');
+                            const templateContent = document.getElementById('templateContent');
+                            const copyButton = document.getElementById('copyButton');
+
+                            if (templateTitle && templateContent && copyButton) {
+                                templateTitle.textContent = type || 'Unknown Template';
+                                const templateFn = templateMap[type];
+                                templateContent.innerHTML = templateFn ? templateFn() : '<em>No template found.</em>';
+                                copyButton.classList.remove('hidden');
+                            } else {
+                                console.warn('Template elements not found');
+                            }
+                        } catch (error) {
+                            console.error('Error in template selection:', error);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error setting up template links:', error);
+            }
+
+            // Search functionality
+            try {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        try {
+                            state.searchQuery = e.target.value || '';
+                            updateUI();
+                        } catch (error) {
+                            console.error('Error in search input:', error);
+                        }
+                    });
+                } else {
+                    console.warn('Search input not found');
+                }
+            } catch (error) {
+                console.error('Error setting up search:', error);
+            }
+
+            // Copy to clipboard
+            try {
+                const copyButton = document.getElementById('copyButton');
+                if (copyButton) {
+                    copyButton.addEventListener('click', () => {
+                        try {
+                            const templateContent = document.getElementById('templateContent');
+                            if (!templateContent) {
+                                console.warn('Template content not found');
+                                return;
+                            }
+                            const content = templateContent.innerText;
+                            if (content) {
+                                navigator.clipboard.writeText(content).then(() => {
+                                    copyButton.textContent = 'Copied!';
+                                    setTimeout(() => {
+                                        copyButton.textContent = 'Copy Template';
+                                    }, 2000);
+                                }).catch(err => {
+                                    console.error('Failed to copy text:', err);
+                                    copyButton.textContent = 'Copy Failed';
+                                    setTimeout(() => {
+                                        copyButton.textContent = 'Copy Template';
+                                    }, 2000);
+                                });
+                            }
+                        } catch (error) {
+                            console.error('Error in copy to clipboard:', error);
+                        }
+                    });
+                } else {
+                    console.warn('Copy button not found');
+                }
+            } catch (error) {
+                console.error('Error setting up copy button:', error);
+            }
+
+            // Initial UI update
+            try {
+                updateUI();
+            } catch (error) {
+                console.error('Error in initial UI update:', error);
+            }
+        });
     </script>
 </body>
 </html>
-``` 
