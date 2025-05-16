@@ -530,24 +530,58 @@
 
             function updateUI() {
                 try {
-                    const links = document.querySelectorAll('.msgtype-link');
-                    links.forEach(link => {
-                        const type = link.getAttribute('data-type')?.toLowerCase() || '';
-                        const section = link.getAttribute('data-section')?.toLowerCase() || '';
-                        const matchesSearch = state.searchQuery === '' || 
-                            type.includes(state.searchQuery.toLowerCase()) || 
-                            section.includes(state.searchQuery.toLowerCase());
-                        const parentLi = link.parentElement;
-                        if (parentLi) {
-                            parentLi.style.display = matchesSearch ? 'block' : 'none';
-                        }
-                    });
+                    const searchQuery = state.searchQuery.toLowerCase();
+                    let anySectionVisible = false;
 
                     document.querySelectorAll('.section-title').forEach(title => {
+                        const sectionName = title.getAttribute('data-section')?.toLowerCase() || '';
                         const content = title.nextElementSibling;
                         if (!content) return;
-                        content.style.display = 'block'; // Ensure sections are visible by default
+
+                        // Filter links within this section
+                        const links = content.querySelectorAll('.msgtype-link');
+                        let hasVisibleLinks = false;
+
+                        links.forEach(link => {
+                            const type = link.getAttribute('data-type')?.toLowerCase() || '';
+                            const matchesSearch = searchQuery === '' || 
+                                type.includes(searchQuery) || 
+                                sectionName.includes(searchQuery);
+                            
+                            link.parentElement.style.display = matchesSearch ? 'block' : 'none';
+                            if (matchesSearch) hasVisibleLinks = true;
+                        });
+
+                        // Show/hide section based on visible links or section name match
+                        const sectionMatches = searchQuery === '' || sectionName.includes(searchQuery);
+                        const shouldShowSection = sectionMatches || hasVisibleLinks;
+
+                        title.style.display = shouldShowSection ? 'flex' : 'none';
+                        content.style.display = shouldShowSection ? 'block' : 'none';
+
+                        // Update collapsible state if section is visible
+                        if (shouldShowSection) {
+                            const isCollapsed = title.getAttribute('data-collapsed') === 'true';
+                            content.classList.toggle('open', !isCollapsed && hasVisibleLinks);
+                            content.style.maxHeight = (!isCollapsed && hasVisibleLinks) ? `${content.scrollHeight}px` : '0';
+                            const svg = title.querySelector('svg');
+                            if (svg) {
+                                svg.classList.toggle('rotate-180', !isCollapsed);
+                            }
+                        }
+
+                        if (shouldShowSection) anySectionVisible = true;
                     });
+
+                    // If no sections are visible, show a message or handle empty state
+                    const sidebarContent = document.getElementById('sidebarContent');
+                    if (!anySectionVisible && searchQuery !== '') {
+                        sidebarContent.innerHTML += '<p class="text-gray-500 text-sm p-2">No matching templates found.</p>';
+                    } else {
+                        // Remove no-results message if it exists
+                        const noResults = sidebarContent.querySelector('.text-gray-500');
+                        if (noResults) noResults.remove();
+                    }
                 } catch (error) {
                     console.error('Error in updateUI:', error);
                 }
@@ -599,7 +633,7 @@
                             if (state.activeLink) {
                                 state.activeLink.classList.remove('active');
                             }
-                            this.classList.add('active');
+                            this.classList.add('-active');
                             state.activeLink = this;
 
                             const type = this.getAttribute('data-type');
