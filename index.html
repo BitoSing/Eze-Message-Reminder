@@ -9,26 +9,26 @@
     <style>
         html, body {
             font-family: 'Inter', Arial, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #e6f0fa 100%); /* White to light blue gradient */
             min-height: 100vh;
             margin: 0;
-            height: 100%; /* Ensure the body takes up the full viewport height */
-            overflow: hidden; /* Prevent scrolling */
+            height: 100%;
+            overflow: hidden;
         }
         .book-wrapper {
             display: flex;
             max-width: 1400px;
             margin: 1.5rem auto;
-            background: #ffffff;
+            background: #ffffff; /* White background */
             border-radius: 1.5rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            height: 93%; /* Match the height of the viewport */
-            overflow: hidden; /* Prevent scrolling */
+            height: 93%;
+            overflow: hidden;
         }
         .sidebar {
             width: 300px;
-            background: #f8fafc;
-            border-right: 1px solid #e2e8f0;
+            background: #f6faff; /* Very light blue */
+            border-right: 1px solid #d1e0ff; /* Light blue border */
             padding: 1.5rem;
             overflow-y: auto;
             transition: width 0.3s ease;
@@ -42,7 +42,7 @@
         .sidebar h2 {
             font-size: 1.25rem;
             font-weight: 700;
-            color: #1e40af;
+            color: #1e3a8a; /* Dark blue */
         }
         .search-container {
             position: relative;
@@ -51,7 +51,7 @@
         .search-input {
             width: 100%;
             padding: 0.5rem 2rem 0.5rem 2.5rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #d1e0ff; /* Light blue border */
             border-radius: 0.5rem;
             font-size: 0.9rem;
         }
@@ -65,7 +65,7 @@
         .section-title {
             font-size: 0.95rem;
             font-weight: 600;
-            color: #047857;
+            color: #1e3a8a; /* Dark blue */
             margin: 1rem 0 0.5rem;
             cursor: pointer;
             display: flex;
@@ -73,7 +73,7 @@
             align-items: center;
         }
         .section-title:hover {
-            color: #065f46;
+            color: #3b82f6; /* Lighter blue on hover */
         }
         .msgtype-list {
             list-style: none;
@@ -82,13 +82,13 @@
             max-height: 200px;
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #4f46e5 #e0e7ff;
+            scrollbar-color: #3b82f6 #e6f0fa; /* Blue scrollbar */
         }
         .msgtype-list::-webkit-scrollbar {
             width: 8px;
         }
         .msgtype-list::-webkit-scrollbar-thumb {
-            background: #4f46e5;
+            background: #3b82f6; /* Blue scrollbar thumb */
             border-radius: 4px;
         }
         .msgtype-link {
@@ -101,8 +101,8 @@
             transition: all 0.2s ease;
         }
         .msgtype-link:hover, .msgtype-link.active {
-            background: #e0e7ff;
-            color: #1e40af;
+            background: #dbeafe; /* Light blue background */
+            color: #1e3a8a; /* Dark blue text */
             font-weight: 500;
         }
         .content-area {
@@ -110,8 +110,9 @@
             padding: 2rem;
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #4f46e5 #e0e7ff;
-            height: calc(100% - 4rem); /* Adjust to fit within the viewport */
+            scrollbar-color: #3b82f6 #e6f0fa; /* Blue scrollbar */
+            height: calc(100% - 4rem);
+            background: #ffffff; /* White background */
         }
         .template-header {
             display: flex;
@@ -122,24 +123,24 @@
         .template-title {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #047857;
+            color: #1e3a8a; /* Dark blue */
         }
         .copy-button {
             padding: 0.5rem 1rem;
-            background: #4f46e5;
+            background: #3b82f6; /* Blue button */
             color: white;
             border-radius: 0.5rem;
             cursor: pointer;
             transition: background 0.2s ease;
         }
         .copy-button:hover {
-            background: #4338ca;
+            background: #1e3a8a; /* Darker blue on hover */
         }
         .data-item {
-            background: #ecfdf5;
+            background: #f6faff; /* Very light blue background */
             padding: 1.5rem;
             border-radius: 0.75rem;
-            border-left: 6px solid #10b981;
+            border-left: 6px solid #3b82f6; /* Blue border */
             font-size: 0.95rem;
             line-height: 1.6;
         }
@@ -151,10 +152,10 @@
         }
         th, td {
             padding: 0.75rem;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #d1e0ff; /* Light blue border */
         }
         th {
-            background: #f8fafc;
+            background: #f6faff; /* Very light blue */
             font-weight: 600;
             color: #1f2937;
         }
@@ -179,7 +180,7 @@
             .sidebar {
                 width: 100%;
                 border-right: none;
-                border-bottom: 1px solid #e2e8f0;
+                border-bottom: 1px solid #d1e0ff; /* Light blue border */
                 max-height: 30vh;
             }
             .content-area {
