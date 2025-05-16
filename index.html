@@ -116,7 +116,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5.ver
+            margin-bottom: 1.5rem;
+        }
+        .template-title {
             font-size: 1.5rem;
             font-weight: 700;
             color: #047857;
@@ -255,6 +257,19 @@
                 <ul class="msgtype-list collapsible-content">
                     <li><a class="msgtype-link" data-section="Renewal/Reactivation Offer" data-type="After Expiry Date Offer">After Expiry Date Offer</a></li>
                     <li><a class="msgtype-link" data-section="Renewal/Reactivation Offer" data-type="Before Expiry Date Offer">Before Expiry Date Offer</a></li>
+                </ul>
+                <div class="section-title" data-section="telegram-message" data-collapsed="true">
+                    Telegram Message
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Renewal Offer">Renewal Offer</a></li>
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="After Expired Offer">After Expired Offer</a></li>
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Notify of Technical Problem">Notify of Technical Problem</a></li>
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Change Plan Confirmation">Change Plan Confirmation</a></li>
+                    <li><a class="msgtype-link" data-section="Telegram Message" data-type="Termination Confirmation">Termination Confirmation</a></li>
                 </ul>
             </div>
         </nav>
@@ -431,6 +446,11 @@
                 "3rd Follow up": () => formatThirdInvoiceFollowUpMessage(),
                 "After Expiry Date Offer": () => formatReactivationOfferMessage("EZECOM"),
                 "Before Expiry Date Offer": () => formatRenewalOfferMessage("EZECOM"),
+                "Renewal Offer": () => '<em>Telegram Renewal Offer template not yet implemented.</em>',
+                "After Expired Offer": () => '<em>Telegram After Expired Offer template not yet implemented.</em>',
+                "Notify of Technical Problem": () => '<em>Telegram Notify of Technical Problem template not yet implemented.</em>',
+                "Change Plan Confirmation": () => '<em>Telegram Change Plan Confirmation template not yet implemented.</em>',
+                "Termination Confirmation": () => '<em>Telegram Termination Confirmation template not yet implemented.</em>',
             };
 
             // UI logic
