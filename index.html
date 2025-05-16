@@ -465,6 +465,24 @@
                     Good Luck,
                 `;
             }
+            function formatTelegramChangePlanConfirmationMessage() {
+                return `
+                    Confirm Your New Plan! 🌟<br><br>
+                    Dear Valuable Customer,<br><br>
+                    We’re excited to offer you an upgraded plan! Please confirm to switch to the new plan below: 🚀<br><br>
+                    <strong>Your Details:</strong><br>
+                    * <strong>CID:</strong> #####<br>
+                    * <strong>SID:</strong> #####<br>
+                    * <strong>Name:</strong> #####<br>
+                    * <strong>Location:</strong> #####<br>
+                    * <strong>Billing:</strong> #####<br><br>
+                    Proposed New Plan: ##### 🎉<br>
+                    <strong>Price: #####</strong><br><br>
+                    To confirm, reply “YES” or contact us back. Deadline Confirmation DD/MMM/YYYY. 💬<br><br>
+                    Thank you for choosing as your partner service internet provider!<br><br>
+                    EZECOM & CELLCARD
+                `;
+            }
 
             // Message type mapping
             const templateMap = {
@@ -481,7 +499,7 @@
                 "Renewal Offer": () => formatTelegramRenewalOfferMessage(),
                 "After Expired Offer": () => formatTelegramAfterExpiredOfferMessage(),
                 "Notify of Technical Problem": () => '<em>Telegram Notify of Technical Problem template not yet implemented.</em>',
-                "Change Plan Confirmation": () => '<em>Telegram Change Plan Confirmation template not yet implemented.</em>',
+                "Change Plan Confirmation": () => formatTelegramChangePlanConfirmationMessage(),
                 "Termination Confirmation": () => '<em>Telegram Termination Confirmation template not yet implemented.</em>',
             };
 
