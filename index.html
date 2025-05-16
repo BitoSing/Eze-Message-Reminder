@@ -12,7 +12,6 @@
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
         }
         .book-wrapper {
             display: flex;
@@ -21,8 +20,9 @@
             background: #ffffff;
             border-radius: 1.5rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            min-height: 800px;
-            height: calc(100vh - 3rem);
+            min-height: 600px;
+            height: calc(100vh - 2rem);
+            overflow: auto;
         }
         .sidebar {
             width: 300px;
@@ -110,6 +110,7 @@
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: #4f46e5 #e0e7ff;
+            min-height: 400px;
         }
         .template-header {
             display: flex;
@@ -162,7 +163,7 @@
             transition: max-height 0.3s ease-out;
         }
         .collapsible-content.open {
-            max-height: 200px; /* Matches max-height in .msgtype-list */
+            max-height: 200px;
         }
         .rotate-180 {
             transform: rotate(180deg);
@@ -172,13 +173,13 @@
                 flex-direction: column;
                 margin: 0;
                 border-radius: 0;
-                height: 100vh;
+                height: auto;
             }
             .sidebar {
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid #e2e8f0;
-                max-height: 40vh;
+                max-height: 30vh;
             }
             .content-area {
                 padding: 1.5rem;
@@ -207,16 +208,6 @@
                 <input type="text" id="searchInput" class="search-input" placeholder="Search templates...">
             </div>
             <div id="sidebarContent">
-                <div class="section-title" data-section="eos-reminder" data-collapsed="true">
-                    EOS Reminder
-                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </div>
-                <ul class="msgtype-list collapsible-content">
-                    <li><a class="msgtype-link" data-section="EOS Reminder" data-type="EOS SMS Reminder">EOS SMS Reminder</a></li>
-                    <li><a class="msgtype-link" data-section="EOS Reminder" data-type="EOS Email Reminder">EOS Email Reminder</a></li>
-                </ul>
                 <div class="section-title" data-section="service-termination" data-collapsed="true">
                     Service Termination
                     <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,11 +256,13 @@
                 <div id="templateTitle" class="template-title">Select a message type to view the template</div>
                 <button id="copyButton" class="copy-button hidden">Copy Template</button>
             </div>
-            <div id="templateContent" class="data-item"></div>
+            <div id="templateContent" class="data-item">Please select a message type from the sidebar to view the template.</div>
         </main>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded and script running');
+
             // Message template functions
             function formatFirstInvoiceFollowUpMessage() {
                 return `
@@ -368,53 +361,6 @@
                     For any further assistance, please reach out. We appreciate your urgent attention to this matter.<br><br>
                     Best regards,<br>
                     Heng
-                `;
-            }
-            function formatEosEmailReminder(company) {
-                return `
-                    <strong class="text-lg text-gray-900">Subject: Outstanding Balance Reminder</strong><br><br>
-                    Dear [Customer's Name],<br><br>
-                    Overdue Reminder!<br><br>
-                    Our record is still shown your overdue invoice hasn't paid yet and please revert the payment now to continue service and avoid interruption.<br><br>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Customer ID</th>
-                                <th>Customer Name</th>
-                                <th>Invoice ID</th>
-                                <th>Invoice Due Date</th>
-                                <th>Amount</th>
-                                <th>Open Day</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>239833</td>
-                                <td>MC MEDICAL CO.,LTD</td>
-                                <td>2064953</td>
-                                <td>2025-03-17 00:12:00</td>
-                                <td>119</td>
-                                <td>1</td>
-                            </tr>
-                        </tbody>
-                    </table><br>
-                    For more information, please visit our website at <a href="https://www.${company.toLowerCase()}.com.kh/support/payment" class="text-blue-600 hover:underline">www.${company.toLowerCase()}.com.kh/support/payment</a><br><br>
-                    Any inquiries about this invoice, payment, or email to our billing department as per attached below.<br><br>
-                    - Email: <a href="mailto:billing@${company.toLowerCase()}.com.kh" class="text-blue-600 hover:underline">billing@${company.toLowerCase()}.com.kh</a><br>
-                    - ${company} APP: <a href="https://${company.toLowerCase()}.page.link/download" class="text-blue-600 hover:underline">Download Here</a><br>
-                    - ${company}'s Telegram: <a href="https://t.me/${company}CXbot" class="text-blue-600 hover:underline">Telegram Bot</a><br>
-                    - ${company} Facebook Page: <a href="https://www.facebook.com/${company.toLowerCase()}/" class="text-blue-600 hover:underline">Facebook</a><br><br>
-                    *Noted: If you have already made payment or any special arrangement with ${company}, please help to ignore this email.<br><br>
-                    Regards,<br>
-                    ${company}
-                `;
-            }
-            function formatEosSmsReminder(company) {
-                return `
-                    <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
-                        <strong class="text-yellow-800">SMS Reminder:</strong><br>
-                        គណនី CID: 255206 សមតុល្យ: $15.00 ផុតសុពលភាពនៅថ្ងៃទី១៨ ខែកុម្ភៈ ឆ្នាំ២០២៥ សូមធ្វើការទូរទាត់ប្រាក់ដើម្បីបន្តប្រើប្រាស់សេវាកម្មអ៊ិនធឺណេត។
-                    </div>
                 `;
             }
             function formatReimbursementMessage(fromCompany, toCompany) {
@@ -543,8 +489,6 @@
 
             // Message type mapping
             const templateMap = {
-                "EOS SMS Reminder": () => formatEosSmsReminder("EZECOM"),
-                "EOS Email Reminder": () => formatEosEmailReminder("EZECOM"),
                 "EZECOM's Termination": () => formatTerminationMessage("EZECOM", "085 888 181"),
                 "Cellcard's Termination": () => formatTerminationMessage("Cellcard", "012 812 812"),
                 "Cellcard to EZECOM": () => formatReimbursementMessage("Cellcard", "EZECOM"),
@@ -577,20 +521,10 @@
                         }
                     });
 
-                    // Show/hide sections based on search results
                     document.querySelectorAll('.section-title').forEach(title => {
                         const content = title.nextElementSibling;
                         if (!content) return;
-                        const sectionLinks = content.querySelectorAll('.msgtype-link');
-                        let hasVisibleLinks = false;
-                        sectionLinks.forEach(link => {
-                            const parentLi = link.parentElement;
-                            if (parentLi && parentLi.style.display !== 'none') {
-                                hasVisibleLinks = true;
-                            }
-                        });
-                        title.style.display = hasVisibleLinks ? 'flex' : 'none';
-                        content.style.display = hasVisibleLinks ? 'block' : 'none';
+                        content.style.display = 'block'; // Ensure sections are visible by default
                     });
                 } catch (error) {
                     console.error('Error in updateUI:', error);
@@ -606,7 +540,6 @@
                         console.warn('No content found for section title:', title);
                         return;
                     }
-                    // Ensure initial state
                     if (title.getAttribute('data-collapsed') === 'true') {
                         content.classList.remove('open');
                         content.style.maxHeight = '0';
@@ -648,6 +581,7 @@
                             state.activeLink = this;
 
                             const type = this.getAttribute('data-type');
+                            console.log('Selected template:', type);
                             const templateTitle = document.getElementById('templateTitle');
                             const templateContent = document.getElementById('templateContent');
                             const copyButton = document.getElementById('copyButton');
@@ -658,7 +592,7 @@
                                 templateContent.innerHTML = templateFn ? templateFn() : '<em>No template found.</em>';
                                 copyButton.classList.remove('hidden');
                             } else {
-                                console.warn('Template elements not found');
+                                console.warn('Template elements not found:', { templateTitle, templateContent, copyButton });
                             }
                         } catch (error) {
                             console.error('Error in template selection:', error);
