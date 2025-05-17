@@ -12,7 +12,7 @@
             background: linear-gradient(135deg, #ffffff 0%, #e6f0fa 100%); /* White to light blue gradient */
             min-height: 100vh;
             margin: 0;
-            height: 100%;
+            height: auto;
             overflow: auto; /* Allow scrolling for the entire page */
         }
         .book-wrapper {
@@ -22,7 +22,7 @@
             background: #ffffff; /* White background */
             border-radius: 1.5rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            height: auto; /* Allow the wrapper to expand naturally */
+            height: 100%; /* Allow the wrapper to expand naturally */
             overflow: hidden;
         }
         .sidebar {
@@ -127,7 +127,7 @@
         }
         .copy-button {
             padding: 0.5rem 1rem;
-            background: #3b82f6; /* Blue button */
+            background: #1e3a8a; /* Blue button */
             color: white;
             border-radius: 0.5rem;
             cursor: pointer;
@@ -140,9 +140,9 @@
             background: #f6faff; /* Very light blue background */
             padding: 1.5rem;
             border-radius: 0.75rem;
-            border-left: 6px solid #3b82f6; /* Blue border */
+            border-left: 6px solid #1e3a8a; /* Blue border */
             font-size: 0.95rem;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         table {
             width: 100%;
@@ -398,16 +398,14 @@
             }
             function formatTerminationMessage(company, contactNumber) {
                 return `
-                    <strong class="text-lg text-gray-900">Subject: ${company} - Request Termination form, For Customer CID: 220964, Name: Mr. Namhong Ek</strong><br><br>
-                    Dear Valued Customer,<br><br>
-                    We regret to inform you that we have received your request to terminate your services with ${company}. We understand that this decision was not made lightly, and we appreciate the time you have spent with us.<br><br>
-                    As per our service agreement, a 30-day notice period is required for termination. Your subscription will be terminated following your next billing date.<br><br>
-                    To proceed with the termination, please complete the attached termination form, sign and stamp it, and return it to us via email or by visiting the nearest ${company} office.<br><br>
-                    Should you reconsider your decision or wish to reactivate your account, please contact our hotline at:<br>
-                    <span class="text-blue-600">Contact Number: ${contactNumber}</span><br><br>
-                    Thank you for your cooperation and understanding.<br><br>
-                    Best regards,<br>
-                    ${company}
+                    <strong class="text-lg text-gray-900">Subject: ${company} - Termination Request for CID: 220964, Mr. Namhong Ek</strong><br><br>
+                    Dear Mr. Namhong Ek,<br><br>
+                    We are deeply saddened to receive your request to terminate your ${company} services. Your time with us has been greatly valued, and we sincerely regret seeing you go.<br><br>
+                    As per our service agreement, a 30-day notice period applies, and your subscription will conclude after your next billing cycle. To proceed, please complete, sign, and stamp the attached termination form and return it via email or at a ${company} office.<br><br>
+                    We truly hope you might reconsider this decision. Should you wish to discuss your options or reactivate your account, please contact our dedicated team at <span class="text-blue-600">${contactNumber}</span>. We would be honored to continue serving you.<br><br>
+                    Thank you for your understanding and past support.<br><br>
+                    Warm regards,<br>
+                    ${company} Customer Service
                 `;
             }
             function formatReactivationOfferMessage(company) {
@@ -513,6 +511,17 @@
                     EZECOM/CELLCARD
                 `;
             }
+            function formatTelegramTerminationConfirmationMessage() {
+                return `
+                    Dear Mr. Namhong Ek,<br><br>
+                    We are deeply saddened to receive your request to terminate your EZECOM services 😔. Your valued patronage has been greatly appreciated.<br><br>
+                    As per our agreement, a 30-day notice period applies, and your subscription will end after your next billing cycle. Kindly complete, sign, and stamp the attached form 📝 and return it via email or at an EZECOM office.<br><br>
+                    We sincerely hope you might reconsider. Please contact us at 085 888 181 to discuss your options or reactivate your account 📞.<br><br>
+                    Thank you for your cooperation and past support.<br><br>
+                    Sincerely,<br>
+                    EZECOM
+                `;
+            }
 
             // Message type mapping
             const templateMap = {
@@ -530,7 +539,7 @@
                 "After Expired Offer": () => formatTelegramAfterExpiredOfferMessage(),
                 "Alert for Technical Issue": () => formatTelegramAlertForTechnicalIssueMessage(),
                 "Change Plan Confirmation": () => formatTelegramChangePlanConfirmationMessage(),
-                "Termination Confirmation": () => '<em>Telegram Termination Confirmation template not yet implemented.</em>',
+                "Termination Confirmation": () => formatTelegramTerminationConfirmationMessage(),
             };
 
             // UI logic
