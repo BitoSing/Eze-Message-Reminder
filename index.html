@@ -291,6 +291,12 @@
             </div>
         </nav>
         <main class="content-area">
+            <!-- Language Switcher -->
+            <div id="languageSwitcher" class="flex gap-2 mb-4">
+                <button class="lang-btn px-3 py-1 rounded bg-blue-100 text-blue-900 font-semibold border border-blue-300" data-lang="en">En</button>
+                <button class="lang-btn px-3 py-1 rounded bg-gray-100 text-gray-700 font-semibold border border-gray-300" data-lang="zh">Ch</button>
+                <button class="lang-btn px-3 py-1 rounded bg-gray-100 text-gray-700 font-semibold border border-gray-300" data-lang="km">Kh</button>
+            </div>
             <div class="template-header">
                 <div id="templateTitle" class="template-title">Select a message type to view the template</div>
                 <button id="copyButton" class="copy-button hidden">Copy Template</button>
@@ -302,8 +308,21 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM fully loaded and script running');
 
-            // Message template functions
-            function formatIncidentReportMessage() {
+            // Language state
+            const state = {
+                activeLink: null,
+                searchQuery: '',
+                currentLanguage: 'en'
+            };
+
+            // Example translation function (expand as needed)
+            function translateTemplate(templateKey, lang) {
+                // Only use manual templates, no API/auto translation
+                return templateMap[templateKey] ? templateMap[templateKey](lang) : '<em>No template found.</em>';
+            }
+
+            // Update template functions to accept language
+            function formatIncidentReportMessage(lang = 'en') {
                 return `
                     <strong class="text-lg text-gray-900">Subject: Request Incident Report of CID: ####, SID: ####, Name: ####</strong><br><br>
                     Dear Bong,<br><br>
@@ -315,7 +334,7 @@
                     LY HENG
                 `;
             }
-            function formatFirstInvoiceFollowUpMessage() {
+            function formatFirstInvoiceFollowUpMessage(lang = 'en') {
                 return `
                     <strong class="text-lg text-gray-900">Subject: First Reminder - Follow-Up on Pending Invoice Payment</strong><br><br>
                     Dear [Customer's Name],<br><br>
@@ -333,7 +352,7 @@
                     Heng
                 `;
             }
-            function formatInvoiceFollowUpMessage(subject) {
+            function formatInvoiceFollowUpMessage(subject, lang = 'en') {
                 return `
                     <strong class="text-lg text-gray-900">Subject: ${subject}</strong><br><br>
                     Dear [Customer's Name],<br><br>
@@ -351,7 +370,7 @@
                     Heng
                 `;
             }
-            function formatThirdInvoiceFollowUpMessage() {
+            function formatThirdInvoiceFollowUpMessage(lang = 'en') {
                 return `
                     <strong class="text-lg text-gray-900">Subject: Final Reminder - Immediate Payment Required</strong><br><br>
                     Dear [Customer's Name],<br><br>
@@ -369,7 +388,7 @@
                     Heng
                 `;
             }
-            function formatReimbursementMessage(fromCompany, toCompany) {
+            function formatReimbursementMessage(fromCompany, toCompany, lang = 'en') {
                 const subject = fromCompany === "EZECOM" 
                     ? `Request offset from EZECOM ID - ###### to Correct Cellcard ID - ######`
                     : `Request offset from Cellcard ID - ###### to Correct EZECOM ID - ######`;
@@ -396,7 +415,7 @@
                     Best regards,
                 `;
             }
-            function formatTerminationMessage(company, contactNumber) {
+            function formatTerminationMessage(company, contactNumber, lang = 'en') {
                 return `
                     <strong class="text-lg text-gray-900">Subject: ${company} - Termination Request for CID: 220964, Mr. Namhong Ek</strong><br><br>
                     Dear Mr. Namhong Ek,<br><br>
@@ -408,7 +427,7 @@
                     ${company} Customer Service
                 `;
             }
-            function formatReactivationOfferMessage(company) {
+            function formatReactivationOfferMessage(company, lang = 'en') {
                 return `
                     <strong class="text-lg text-gray-900">Subject: Special Offer - Reactivate Your ${company} Internet Service Today!</strong><br><br>
                     Dear [Customer's Name],<br><br>
@@ -428,7 +447,7 @@
                     ${company} Team
                 `;
             }
-            function formatRenewalOfferMessage(company) {
+            function formatRenewalOfferMessage(company, lang = 'en') {
                 return `
                     <strong class="text-lg text-gray-900">Subject: Special Offer - Renew Your ${company} Internet Service Before It Expires!</strong><br><br>
                     Dear [Customer's Name],<br><br>
@@ -448,7 +467,23 @@
                     ${company} Team
                 `;
             }
-            function formatTelegramRenewalOfferMessage() {
+            function formatTelegramRenewalOfferMessage(lang = 'en') {
+                if (lang === 'km') {
+                    return `
+                        បន្តគម្រោងរបស់អ្នក & សន្សំសំចៃ! 🌟<br><br>
+                        សូមគោរព [ឈ្មោះអតិថិជន] គម្រោងសេវាកម្មរបស់អ្នកជិតផុតកំណត់។ ចាប់យកការផ្តល់ជូនផ្តាច់មុខនេះដើម្បីរក្សាសេវាកម្មរបស់អ្នកឱ្យដំណើរការ! 🚀<br><br>
+                        ព័ត៌មានលម្អិតរបស់អ្នក:<br>
+                        * CID: [លេខសម្គាល់អតិថិជន]<br>
+                        * SID: [លេខសម្គាល់ការជាវ]<br>
+                        * ឈ្មោះ: [ឈ្មោះអតិថិជន]<br>
+                        * វិក្កយបត្រ: [កាលបរិច្ឆេទចេញវិក្កយបត្រ]<br>
+                        * ទីតាំង: [ទីតាំងអតិថិជន]<br><br>
+                        ផ្តល់ជូន: [12 ខែឥតគិតថ្លៃ 3 ខែ] 🎉<br>
+                        តម្លៃ: [#####]<br><br>
+                        ឆ្លើយតប ឬទាក់ទងមកយើងខ្ញុំសម្រាប់ព័ត៌មានលម្អិតបន្ថែម! 💬<br><br>
+                        សំណាងល្អ
+                    `;
+                }
                 return `
                     Renew Your Plan & Save! 🌟<br><br>
                     Dear [Customer's Name], your service plan is about to expire. Grab this exclusive offer to keep your services running! 🚀<br><br>
@@ -464,7 +499,23 @@
                     Good Luck,
                 `;
             }
-            function formatTelegramAfterExpiredOfferMessage() {
+            function formatTelegramAfterExpiredOfferMessage(lang = 'en') {
+                if (lang === 'km') {
+                    return `
+                        ត្រលប់មកវិញជាមួយនឹងកិច្ចព្រមព្រៀងដ៏អស្ចារ្យ! 🎁<br><br>
+                        សូមគោរព [ឈ្មោះអតិថិជន] គម្រោងសេវាកម្មរបស់អ្នកត្រូវបានផុតកំណត់។ ចាប់យកការផ្តល់ជូនផ្តាច់មុខនេះដើម្បីរក្សាសេវាកម្មរបស់អ្នកឱ្យដំណើរការ! 🚀<br><br>
+                        ព័ត៌មានលម្អិតរបស់អ្នក:<br>
+                        * CID: [លេខសម្គាល់អតិថិជន]<br>
+                        * SID: [លេខសម្គាល់ការជាវ]<br>
+                        * ឈ្មោះ: [ឈ្មោះអតិថិជន]<br>
+                        * វិក្កយបត្រ: [កាលបរិច្ឆេទចេញវិក្កយបត្រ]<br>
+                        * ទីតាំង: [ទីតាំងអតិថិជន]<br><br>
+                        ដំណើរការឡើងវិញ ការផ្តល់ជូន: [12 ខែ ឥតគិតថ្លៃ 3 ខែ] 🎉<br>
+                        តម្លៃ: [#####]<br><br>
+                        ឆ្លើយតប ឬទាក់ទងមកយើងខ្ញុំសម្រាប់ព័ត៌មានលម្អិតបន្ថែម! 💬<br><br>
+                        សំណាងល្អ
+                    `;
+                }
                 return `
                     Come Back with a Great Deal! 🎁<br><br>
                     Dear [Customer's Name], your service plan has been expired. Grab this exclusive offer to keep your services running! 🚀<br><br>
@@ -480,7 +531,7 @@
                     Good Luck,
                 `;
             }
-            function formatTelegramChangePlanConfirmationMessage() {
+            function formatTelegramChangePlanConfirmationMessage(lang = 'en') {
                 return `
                     Confirm Your New Plan! 🌟<br><br>
                     Dear Valuable Customer,<br><br>
@@ -498,7 +549,7 @@
                     EZECOM & CELLCARD
                 `;
             }
-            function formatTelegramAlertForTechnicalIssueMessage() {
+            function formatTelegramAlertForTechnicalIssueMessage(lang = 'en') {
                 return `
                     Dear [Customer Name],<br><br>
                     We deeply regret the inconvenience caused by your internet service issue. A support ticket has been created, and our technical team is prioritizing a swift resolution. You will be contacted soon.<br><br>
@@ -511,43 +562,46 @@
                     EZECOM/CELLCARD
                 `;
             }
-            function formatTelegramTerminationConfirmationMessage() {
-                return `
-                    Dear Mr. Namhong Ek,<br><br>
-                    We are deeply saddened to receive your request to terminate your EZECOM services 😔. Your valued patronage has been greatly appreciated.<br><br>
-                    As per our agreement, a 30-day notice period applies, and your subscription will end after your next billing cycle. Kindly complete, sign, and stamp the attached form 📝 and return it via email or at an EZECOM office.<br><br>
-                    We sincerely hope you might reconsider. Please contact us at 085 888 181 to discuss your options or reactivate your account 📞.<br><br>
-                    Thank you for your cooperation and past support.<br><br>
-                    Sincerely,<br>
-                    EZECOM
-                `;
+            function formatTelegramTerminationConfirmationMessage(lang = 'en') {
+                if (lang === 'en') {
+                    return `
+                        Dear Mr. Namhong Ek,<br><br>
+                        We are deeply saddened to receive your request to terminate your EZECOM services 😔. Your valued patronage has been greatly appreciated.<br><br>
+                        As per our agreement, a 30-day notice period applies, and your subscription will end after your next billing cycle. Kindly complete, sign, and stamp the attached form 📝 and return it via email or at an EZECOM office.<br><br>
+                        We sincerely hope you might reconsider. Please contact us at 085 888 181 to discuss your options or reactivate your account 📞.<br><br>
+                        Thank you for your cooperation and past support.<br><br>
+                        Sincerely,<br>
+                        EZECOM
+                    `;
+                }
+                if (lang === 'zh') {
+                    return `<em>Chinese translation coming soon.</em>`;
+                }
+                if (lang === 'km') {
+                    return `<em>Khmer translation coming soon.</em>`;
+                }
             }
 
-            // Message type mapping
+            // Message type mapping (pass language)
             const templateMap = {
-                "Request Incident Report": () => formatIncidentReportMessage(),
-                "EZECOM's Termination": () => formatTerminationMessage("EZECOM", "085 888 181"),
-                "Cellcard's Termination": () => formatTerminationMessage("Cellcard", "012 812 812"),
-                "Cellcard to EZECOM": () => formatReimbursementMessage("Cellcard", "EZECOM"),
-                "EZECOM to Cellcard": () => formatReimbursementMessage("EZECOM", "Cellcard"),
-                "1st Follow up": () => formatFirstInvoiceFollowUpMessage(),
-                "2nd Follow up": () => formatInvoiceFollowUpMessage("Second Reminder - Urgent Payment Required"),
-                "3rd Follow up": () => formatThirdInvoiceFollowUpMessage(),
-                "After Expiry Date Offer": () => formatReactivationOfferMessage("EZECOM"),
-                "Before Expiry Date Offer": () => formatRenewalOfferMessage("EZECOM"),
-                "Renewal Offer": () => formatTelegramRenewalOfferMessage(),
-                "After Expired Offer": () => formatTelegramAfterExpiredOfferMessage(),
-                "Alert for Technical Issue": () => formatTelegramAlertForTechnicalIssueMessage(),
-                "Change Plan Confirmation": () => formatTelegramChangePlanConfirmationMessage(),
-                "Termination Confirmation": () => formatTelegramTerminationConfirmationMessage(),
+                "Request Incident Report": (lang) => formatIncidentReportMessage(lang),
+                "EZECOM's Termination": (lang) => formatTerminationMessage("EZECOM", "085 888 181", lang),
+                "Cellcard's Termination": (lang) => formatTerminationMessage("Cellcard", "012 812 812", lang),
+                "Cellcard to EZECOM": (lang) => formatReimbursementMessage("Cellcard", "EZECOM", lang),
+                "EZECOM to Cellcard": (lang) => formatReimbursementMessage("EZECOM", "Cellcard", lang),
+                "1st Follow up": (lang) => formatFirstInvoiceFollowUpMessage(lang),
+                "2nd Follow up": (lang) => formatInvoiceFollowUpMessage("Second Reminder - Urgent Payment Required", lang),
+                "3rd Follow up": (lang) => formatThirdInvoiceFollowUpMessage(lang),
+                "After Expiry Date Offer": (lang) => formatReactivationOfferMessage("EZECOM", lang),
+                "Before Expiry Date Offer": (lang) => formatRenewalOfferMessage("EZECOM", lang),
+                "Renewal Offer": (lang) => formatTelegramRenewalOfferMessage(lang),
+                "After Expired Offer": (lang) => formatTelegramAfterExpiredOfferMessage(lang),
+                "Alert for Technical Issue": (lang) => formatTelegramAlertForTechnicalIssueMessage(lang),
+                "Change Plan Confirmation": (lang) => formatTelegramChangePlanConfirmationMessage(lang),
+                "Termination Confirmation": (lang) => formatTelegramTerminationConfirmationMessage(lang),
             };
 
             // UI logic
-            const state = {
-                activeLink: null,
-                searchQuery: '',
-            };
-
             function updateUI() {
                 try {
                     const searchQuery = state.searchQuery.toLowerCase();
@@ -657,18 +711,14 @@
                             state.activeLink = this;
 
                             const type = this.getAttribute('data-type');
-                            console.log('Selected template:', type);
                             const templateTitle = document.getElementById('templateTitle');
                             const templateContent = document.getElementById('templateContent');
                             const copyButton = document.getElementById('copyButton');
 
                             if (templateTitle && templateContent && copyButton) {
                                 templateTitle.textContent = type || 'Unknown Template';
-                                const templateFn = templateMap[type];
-                                templateContent.innerHTML = templateFn ? templateFn() : '<em>No template found.</em>';
+                                templateContent.innerHTML = translateTemplate(type, state.currentLanguage);
                                 copyButton.classList.remove('hidden');
-                            } else {
-                                console.warn('Template elements not found:', { templateTitle, templateContent, copyButton });
                             }
                         } catch (error) {
                             console.error('Error in template selection:', error);
@@ -733,6 +783,32 @@
                 }
             } catch (error) {
                 console.error('Error setting up copy button:', error);
+            }
+
+            // Language switcher logic
+            try {
+                const langBtns = document.querySelectorAll('.lang-btn');
+                langBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        langBtns.forEach(b => {
+                            b.classList.remove('bg-blue-100', 'text-blue-900', 'border-blue-300');
+                            b.classList.add('bg-gray-100', 'text-gray-700', 'border-gray-300');
+                        });
+                        this.classList.remove('bg-gray-100', 'text-gray-700', 'border-gray-300');
+                        this.classList.add('bg-blue-100', 'text-blue-900', 'border-blue-300');
+                        state.currentLanguage = this.getAttribute('data-lang');
+                        // Refresh template if one is selected
+                        if (state.activeLink) {
+                            const type = state.activeLink.getAttribute('data-type');
+                            const templateContent = document.getElementById('templateContent');
+                            if (templateContent) {
+                                templateContent.innerHTML = translateTemplate(type, state.currentLanguage);
+                            }
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error setting up language switcher:', error);
             }
 
             // Initial UI update
