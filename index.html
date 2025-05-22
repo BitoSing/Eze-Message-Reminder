@@ -555,17 +555,35 @@
                 `;
             }
             function formatTelegramAlertForTechnicalIssueMessage(lang = 'en') {
-                return `
-                    Dear [Customer Name],<br><br>
-                    We deeply regret the inconvenience caused by your internet service issue. A support ticket has been created, and our technical team is prioritizing a swift resolution. You will be contacted soon.<br><br>
-                    For further assistance, please reach out via:<br><br>
-                    📞 Hotline: 085 888 181<br>
-                    💬 EZECOM Telegram: @EZECOM_Agent_bot<br>
-                    💬 CELLCARD Telegram: @Cellcard_Bot<br><br>
-                    Thank you for your patience and trust in [EZECOM/CELLCARD]. 🌟<br><br>
-                    Sincerely,<br>
-                    EZECOM/CELLCARD
-                `;
+                if (lang === 'en') {
+                    return `
+                        Dear [Customer Name],<br><br>
+                        We deeply regret the inconvenience caused by your internet service issue. A support ticket has been created, and our technical team is prioritizing a swift resolution. You will be contacted soon.<br><br>
+                        For further assistance, please reach out via:<br><br>
+                        📞 Hotline: 085 888 181<br>
+                        💬 EZECOM Telegram: @EZECOM_Agent_bot<br>
+                        💬 CELLCARD Telegram: @Cellcard_Bot<br><br>
+                        Thank you for your patience and trust in [EZECOM/CELLCARD]. 🌟<br><br>
+                        Sincerely,<br>
+                        EZECOM/CELLCARD
+                    `;
+                }
+                if (lang === 'km') {
+                    return `
+                        ជូនចំពោះអតិថិជនជាទីគោរព!<br><br>
+                        យើងសូមអភ័យទោសដោយស្មោះចំពោះភាពរអាក់រអួលដែលអ្នកបានជួបប្រទះជាមួយសេវាកម្មអ៊ីនធឺណិតរបស់អ្នក។ ដើម្បីធានាបាននូវដំណោះស្រាយរហ័ស យើងបានបញ្ជូនបញ្ហាទៅកាន់ក្រុមបច្ចេកទេសរបស់យើង។ ពួកគេនឹងទាក់ទងអ្នកឱ្យបានឆាប់តាមដែលអាចធ្វើទៅបាន ដើម្បីដោះស្រាយបញ្ហានេះ។<br><br>
+                        ប្រសិនបើអ្នកត្រូវការជំនួយបន្ថែម សូមជួយធ្វើការទាក់ទងតាមរយៈបណ្តាញ HOTLINE៖<br><br>
+                        • Telegram៖ @EZECOM_Agent_bot<br>
+                        • CELLCARD Telegram: @Cellcard_Bot<br>
+                        • Hotline Number: 085 888 181<br><br>
+                        សូមអរគុណចំពោះការយោគយល់ និងការអត់ធ្មត់របស់អ្នក។ យើងសូមកោតសរសើរចំពោះការជឿទុកចិត្តរបស់អ្នកចំពោះ [EZECOM / CELLCARD] ហើយប្តេជ្ញាចិត្តក្នុងការដោះស្រាយរឿងនេះឱ្យបានឆាប់រហ័ស។<br><br>
+                        សូមគោរព<br>
+                        EZECOM / CELLCARD
+                    `;
+                }
+                if (lang === 'zh') {
+                    return `<em>Chinese translation coming soon.</em>`;
+                }
             }
             function formatTelegramTerminationConfirmationMessage(lang = 'en') {
                 if (lang === 'en') {
