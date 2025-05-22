@@ -9,26 +9,26 @@
     <style>
         html, body {
             font-family: 'Inter', Arial, sans-serif;
-            background: linear-gradient(135deg, #ffffff 0%, #e6f0fa 100%); /* White to light blue gradient */
+            background: linear-gradient(135deg, #ffffff 0%, #e6f0fa 100%);
             min-height: 100vh;
             margin: 0;
             height: auto;
-            overflow: auto; /* Allow scrolling for the entire page */
+            overflow: auto;
         }
         .book-wrapper {
             display: flex;
             max-width: 1400px;
             margin: 1.5rem auto;
-            background: #ffffff; /* White background */
+            background: #ffffff;
             border-radius: 1.5rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            height: 100%; /* Allow the wrapper to expand naturally */
+            height: 100%;
             overflow: hidden;
         }
         .sidebar {
             width: 300px;
-            background: #f6faff; /* Very light blue */
-            border-right: 1px solid #d1e0ff; /* Light blue border */
+            background: #f6faff;
+            border-right: 1px solid #d1e0ff;
             padding: 1.5rem;
             overflow-y: auto;
             transition: width 0.3s ease;
@@ -42,7 +42,7 @@
         .sidebar h2 {
             font-size: 1.25rem;
             font-weight: 700;
-            color: #1e3a8a; /* Dark blue */
+            color: #1e3a8a;
         }
         .search-container {
             position: relative;
@@ -51,7 +51,7 @@
         .search-input {
             width: 100%;
             padding: 0.5rem 2rem 0.5rem 2.5rem;
-            border: 1px solid #d1e0ff; /* Light blue border */
+            border: 1px solid #d1e0ff;
             border-radius: 0.5rem;
             font-size: 0.9rem;
         }
@@ -65,7 +65,7 @@
         .section-title {
             font-size: 0.95rem;
             font-weight: 600;
-            color: #1e3a8a; /* Dark blue */
+            color: #1e3a8a;
             margin: 1rem 0 0.5rem;
             cursor: pointer;
             display: flex;
@@ -73,7 +73,7 @@
             align-items: center;
         }
         .section-title:hover {
-            color: #3b82f6; /* Lighter blue on hover */
+            color: #3b82f6;
         }
         .msgtype-list {
             list-style: none;
@@ -82,13 +82,13 @@
             max-height: 200px;
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #3b82f6 #e6f0fa; /* Blue scrollbar */
+            scrollbar-color: #3b82f6 #e6f0fa;
         }
         .msgtype-list::-webkit-scrollbar {
             width: 8px;
         }
         .msgtype-list::-webkit-scrollbar-thumb {
-            background: #3b82f6; /* Blue scrollbar thumb */
+            background: #3b82f6;
             border-radius: 4px;
         }
         .msgtype-link {
@@ -101,18 +101,18 @@
             transition: all 0.2s ease;
         }
         .msgtype-link:hover, .msgtype-link.active {
-            background: #dbeafe; /* Light blue background */
-            color: #1e3a8a; /* Dark blue text */
+            background: #dbeafe;
+            color: #1e3a8a;
             font-weight: 500;
         }
         .content-area {
             flex: 1;
             padding: 2rem;
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #3b82f6 #e6f0fa; /* Blue scrollbar */
-            max-height: 100%; /* Ensure it doesn't exceed the viewport height */
-            background: #ffffff; /* White background */
+            scrollbar-color: #3b82f6 #e6f0fa;
+            max-height: 100%;
+            background: #ffffff;
         }
         .template-header {
             display: flex;
@@ -123,24 +123,24 @@
         .template-title {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #1e3a8a; /* Dark blue */
+            color: #1e3a8a;
         }
         .copy-button {
             padding: 0.5rem 1rem;
-            background: #1e3a8a; /* Blue button */
+            background: #1e3a8a;
             color: white;
             border-radius: 0.5rem;
             cursor: pointer;
             transition: background 0.2s ease;
         }
         .copy-button:hover {
-            background: #1e3a8a; /* Darker blue on hover */
+            background: #1e3a8a;
         }
         .data-item {
-            background: #f6faff; /* Very light blue background */
+            background: #f6faff;
             padding: 1.5rem;
             border-radius: 0.75rem;
-            border-left: 6px solid #1e3a8a; /* Blue border */
+            border-left: 6px solid #1e3a8a;
             font-size: 0.95rem;
             line-height: 1.5;
         }
@@ -152,10 +152,10 @@
         }
         th, td {
             padding: 0.75rem;
-            border-bottom: 1px solid #d1e0ff; /* Light blue border */
+            border-bottom: 1px solid #d1e0ff;
         }
         th {
-            background: #f6faff; /* Very light blue */
+            background: #f6faff;
             font-weight: 600;
             color: #1f2937;
         }
@@ -175,19 +175,19 @@
                 flex-direction: column;
                 margin: 0;
                 border-radius: 0;
-                height: auto; /* Allow content to expand naturally */
+                height: auto;
             }
             .sidebar {
                 width: 100%;
                 border-right: none;
-                border-bottom: 1px solid #d1e0ff; /* Light blue border */
+                border-bottom: 1px solid #d1e0ff;
                 max-height: 30vh;
-                overflow-y: auto; /* Ensure scrolling for long content */
+                overflow-y: auto;
             }
             .content-area {
                 padding: 1.5rem;
-                height: auto; /* Allow content to expand naturally */
-                overflow-y: auto; /* Enable scrolling for content area */
+                height: auto;
+                overflow-y: auto;
             }
         }
         @media (max-width: 640px) {
@@ -198,16 +198,16 @@
                 padding: 1rem;
             }
             .sidebar {
-                max-height: 40vh; /* Increase height for better usability */
+                max-height: 40vh;
             }
             .search-input {
-                font-size: 0.8rem; /* Adjust font size for smaller screens */
+                font-size: 0.8rem;
             }
             .msgtype-link {
-                font-size: 0.8rem; /* Adjust font size for smaller screens */
+                font-size: 0.8rem;
             }
             .content-area {
-                overflow-y: auto; /* Ensure scrolling for smaller screens */
+                overflow-y: auto;
             }
         }
     </style>
@@ -288,10 +288,19 @@
                     <li><a class="msgtype-link" data-section="Telegram Message" data-type="Change Plan Confirmation">Change Plan Confirmation</a></li>
                     <li><a class="msgtype-link" data-section="Telegram Message" data-type="Termination Confirmation">Termination Confirmation</a></li>
                 </ul>
+                <div class="section-title" data-section="eos-credit-note" data-collapsed="true">
+                    EOS Credit Note
+                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <ul class="msgtype-list collapsible-content">
+                    <li><a class="msgtype-link" data-section="EOS Credit Note" data-type="Fiber Issues">Fiber Issues</a></li>
+                    <li><a class="msgtype-link" data-section="EOS Credit Note" data-type="Personal Issues">Personal Issues</a></li>
+                </ul>
             </div>
         </nav>
         <main class="content-area">
-            <!-- Language Switcher -->
             <div id="languageSwitcher" class="flex gap-2 mb-4">
                 <button class="lang-btn px-3 py-1 rounded bg-blue-100 text-blue-900 font-semibold border border-blue-300" data-lang="en">En</button>
                 <button class="lang-btn px-3 py-1 rounded bg-gray-100 text-gray-700 font-semibold border border-gray-300" data-lang="zh">Ch</button>
@@ -308,20 +317,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM fully loaded and script running');
 
-            // Language state
             const state = {
                 activeLink: null,
                 searchQuery: '',
                 currentLanguage: 'en'
             };
 
-            // Example translation function (expand as needed)
             function translateTemplate(templateKey, lang) {
-                // Only use manual templates, no API/auto translation
                 return templateMap[templateKey] ? templateMap[templateKey](lang) : '<em>No template found.</em>';
             }
 
-            // Update template functions to accept language
             function formatIncidentReportMessage(lang = 'en') {
                 return `
                     <strong class="text-lg text-gray-900">Subject: Request Incident Report of CID: ####, SID: ####, Name: ####</strong><br><br>
@@ -581,8 +586,46 @@
                     return `<em>Khmer translation coming soon.</em>`;
                 }
             }
+            function formatFiberIssuesCreditNote(lang = 'en') {
+                if (lang === 'en') {
+                    return `
+                        <strong class="text-lg text-gray-900">Flow:</strong><br>
+                        - Incident report + Metabase Report + Invoice Credit Note<br>
+                        - Calculation Amount > Process Credit Note in EOS > Refund Credit in Eze24<br><br>
+                        <strong class="text-lg text-gray-900">Subject: Request for Approval: Credit Note & Refund Processing</strong><br><br>
+                        Dear Management Team,<br><br>
+                        I hope this email finds you well.<br><br>
+                        We kindly request your approval to process a credit note and issue a refund to the customer due to our inability to complete the installation at the designated project site (City Hall, 40 Road). Unfortunately, the customer is unable to wait for our restoration efforts.<br><br>
+                        <strong class="text-gray-800">Customer Details:</strong><br><br>
+                        • CID: ##### | SID: ##### | Name: #####<br>
+                        • Invoice/Credit Note No: ###### (12+3 months)<br>
+                        • Amount Paid: $348 (17th March 2025)<br>
+                        • Issued Date: 31st March 2025<br><br>
+                        To proceed, we need to generate a credit note for $##### to facilitate the refund. For your reference, we have attached the relevant documents related to this case.<br><br>
+                        Thank you for your attention to this matter. Please let us know if any further details are required.<br><br>
+                        Best regards,<br>
+                        [Your Name/Team]
+                    `;
+                }
+                if (lang === 'zh') {
+                    return `<em>Chinese translation coming soon.</em>`;
+                }
+                if (lang === 'km') {
+                    return `<em>Khmer translation coming soon.</em>`;
+                }
+            }
+            function formatPersonalIssuesCreditNote(lang = 'en') {
+                if (lang === 'en') {
+                    return `<em>Template for Personal Issues credit note coming soon.</em>`;
+                }
+                if (lang === 'zh') {
+                    return `<em>Chinese translation coming soon.</em>`;
+                }
+                if (lang === 'km') {
+                    return `<em>Khmer translation coming soon.</em>`;
+                }
+            }
 
-            // Message type mapping (pass language)
             const templateMap = {
                 "Request Incident Report": (lang) => formatIncidentReportMessage(lang),
                 "EZECOM's Termination": (lang) => formatTerminationMessage("EZECOM", "085 888 181", lang),
@@ -599,9 +642,10 @@
                 "Alert for Technical Issue": (lang) => formatTelegramAlertForTechnicalIssueMessage(lang),
                 "Change Plan Confirmation": (lang) => formatTelegramChangePlanConfirmationMessage(lang),
                 "Termination Confirmation": (lang) => formatTelegramTerminationConfirmationMessage(lang),
+                "Fiber Issues": (lang) => formatFiberIssuesCreditNote(lang),
+                "Personal Issues": (lang) => formatPersonalIssuesCreditNote(lang)
             };
 
-            // UI logic
             function updateUI() {
                 try {
                     const searchQuery = state.searchQuery.toLowerCase();
@@ -612,7 +656,6 @@
                         const content = title.nextElementSibling;
                         if (!content) return;
 
-                        // Filter links within this section
                         const links = content.querySelectorAll('.msgtype-link');
                         let hasVisibleLinks = false;
 
@@ -626,14 +669,12 @@
                             if (matchesSearch) hasVisibleLinks = true;
                         });
 
-                        // Show/hide section based on visible links or section name match
                         const sectionMatches = searchQuery === '' || sectionName.includes(searchQuery);
                         const shouldShowSection = sectionMatches || hasVisibleLinks;
 
                         title.style.display = shouldShowSection ? 'flex' : 'none';
                         content.style.display = shouldShowSection ? 'block' : 'none';
 
-                        // Update collapsible state if section is visible
                         if (shouldShowSection) {
                             const isCollapsed = title.getAttribute('data-collapsed') === 'true';
                             content.classList.toggle('open', !isCollapsed && hasVisibleLinks);
@@ -647,12 +688,10 @@
                         if (shouldShowSection) anySectionVisible = true;
                     });
 
-                    // If no sections are visible, show a message or handle empty state
                     const sidebarContent = document.getElementById('sidebarContent');
                     if (!anySectionVisible && searchQuery !== '') {
                         sidebarContent.innerHTML += '<p class="text-gray-500 text-sm p-2">No matching templates found.</p>';
                     } else {
-                        // Remove no-results message if it exists
                         const noResults = sidebarContent.querySelector('.text-gray-500');
                         if (noResults) noResults.remove();
                     }
@@ -661,7 +700,6 @@
                 }
             }
 
-            // Initialize collapsible sections
             try {
                 const sectionTitles = document.querySelectorAll('.section-title');
                 sectionTitles.forEach(title => {
@@ -697,7 +735,6 @@
                 console.error('Error initializing collapsible sections:', error);
             }
 
-            // Handle template selection
             try {
                 const msgTypeLinks = document.querySelectorAll('.msgtype-link');
                 msgTypeLinks.forEach(link => {
@@ -729,7 +766,6 @@
                 console.error('Error setting up template links:', error);
             }
 
-            // Search functionality
             try {
                 const searchInput = document.getElementById('searchInput');
                 if (searchInput) {
@@ -748,7 +784,6 @@
                 console.error('Error setting up search:', error);
             }
 
-            // Copy to clipboard
             try {
                 const copyButton = document.getElementById('copyButton');
                 if (copyButton) {
@@ -785,7 +820,6 @@
                 console.error('Error setting up copy button:', error);
             }
 
-            // Language switcher logic
             try {
                 const langBtns = document.querySelectorAll('.lang-btn');
                 langBtns.forEach(btn => {
@@ -797,7 +831,6 @@
                         this.classList.remove('bg-gray-100', 'text-gray-700', 'border-gray-300');
                         this.classList.add('bg-blue-100', 'text-blue-900', 'border-blue-300');
                         state.currentLanguage = this.getAttribute('data-lang');
-                        // Refresh template if one is selected
                         if (state.activeLink) {
                             const type = state.activeLink.getAttribute('data-type');
                             const templateContent = document.getElementById('templateContent');
@@ -811,7 +844,6 @@
                 console.error('Error setting up language switcher:', error);
             }
 
-            // Initial UI update
             try {
                 updateUI();
             } catch (error) {
