@@ -289,14 +289,15 @@
                     <li><a class="msgtype-link" data-section="Telegram Message" data-type="Termination Confirmation">Termination Confirmation</a></li>
                 </ul>
                 <div class="section-title" data-section="eos-credit-note" data-collapsed="true">
-                    EOS Credit Note
+                    EOS - Credit Note and Inv. Revision
                     <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </div>
                 <ul class="msgtype-list collapsible-content">
-                    <li><a class="msgtype-link" data-section="EOS Credit Note" data-type="Fiber Issues">Fiber Issues</a></li>
-                    <li><a class="msgtype-link" data-section="EOS Credit Note" data-type="Personal Issues">Personal Issues</a></li>
+                    <li><a class="msgtype-link" data-section="EOS - Credit Note and Inv. Revision" data-type="Invoice Revision">Invoice Revision</a></li>
+                    <li><a class="msgtype-link" data-section="EOS - Credit Note and Inv. Revision" data-type="Fiber Issues">Fiber Issues</a></li>
+                    <li><a class="msgtype-link" data-section="EOS - Credit Note and Inv. Revision" data-type="Personal Issues">Personal Issues</a></li>
                 </ul>
             </div>
         </nav>
@@ -643,6 +644,24 @@
                     return `<em>Khmer translation coming soon.</em>`;
                 }
             }
+            function formatInvoiceRevisionTemplate(lang = 'en') {
+                return `
+                    <strong class="text-lg text-gray-900">Subject: Request Revise on Inv. No - #####, CID - #####, Name - ######</strong><br><br>
+                    Dear [Customer's Name],<br><br>
+                    I hope this email finds you well.<br><br>
+                    We would like to seek your approval through this request for Revise on Invoice on the invoice as below mentioned:<br><br>
+                    <strong>Revise inv. Details to:</strong><br><br>
+                    • CID: ##### | SID: ##### | Name: #####<br>
+                    • Period: 12+3 (28th May 25 to 28th Aug 26)<br>
+                    • Amount (Incl.VAT): $348<br>
+                    • Inv. No / Issued on: ##### / issued 28th May 25.<br><br>
+                    <strong>Root Cause:</strong> Due to the invoice is monthly, the customer has made payment as upfront, the customer also requests to have 1 invoice only.<br><br>
+                    <strong>Solution/Preventive Action:</strong> To make changes to invoices in month from monthly to upfront payment as the customer request, we would like to seek your approval to revise on this invoice from monthly to upfront payment.<br><br>
+                    Should you have any further concerns, please do not hesitate to reach out to me.<br><br>
+                    Thank and regarding,<br>
+                    YOUR NAME
+                `;
+            }
 
             const templateMap = {
                 "Request Incident Report": (lang) => formatIncidentReportMessage(lang),
@@ -660,6 +679,7 @@
                 "Alert for Technical Issue": (lang) => formatTelegramAlertForTechnicalIssueMessage(lang),
                 "Change Plan Confirmation": (lang) => formatTelegramChangePlanConfirmationMessage(lang),
                 "Termination Confirmation": (lang) => formatTelegramTerminationConfirmationMessage(lang),
+                "Invoice Revision": (lang) => formatInvoiceRevisionTemplate(lang),
                 "Fiber Issues": (lang) => formatFiberIssuesCreditNote(lang),
                 "Personal Issues": (lang) => formatPersonalIssuesCreditNote(lang)
             };
