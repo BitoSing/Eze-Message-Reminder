@@ -635,7 +635,22 @@
             }
             function formatPersonalIssuesCreditNote(lang = 'en') {
                 if (lang === 'en') {
-                    return `<em>Template for Personal Issues credit note coming soon.</em>`;
+                    return `
+                        <strong class="text-lg text-gray-900">Subject: Request to Amend Invoice No - #####, CID - #####, Name - ######</strong><br><br>
+                        Dear [Customer's Name],<br><br>
+                        I hope you are doing well.<br><br>
+                        We have identified that the invoice was issued on a monthly basis, while you have made an upfront payment and requested a single invoice. We sincerely apologize for this oversight.<br><br>
+                        <strong>Corrected Invoice Details:</strong><br><br>
+                        • CID: ##### | SID: ##### | Name: #####<br>
+                        • Period: 12+3 (28th May 25 to 28th Aug 26)<br>
+                        • Amount (Incl.VAT): $348<br>
+                        • Inv. No / Issued on: ##### / issued 28th May 25.<br><br>
+                        <strong>Reason:</strong> The invoice was mistakenly set as monthly instead of upfront, not reflecting your payment preference.<br><br>
+                        <strong>Corrective Action:</strong> We will revise the invoice to consolidate all monthly charges into a single upfront invoice as per your request. Your approval is kindly requested to proceed.<br><br>
+                        If you have any questions or need further clarification, please let us know.<br><br>
+                        Thank you for your understanding and best regards,<br>
+                        YOUR NAME
+                    `;
                 }
                 if (lang === 'zh') {
                     return `<em>Chinese translation coming soon.</em>`;
